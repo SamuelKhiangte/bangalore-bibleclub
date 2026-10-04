@@ -9,6 +9,7 @@ import { NotificationBanner } from './components/notifications/NotificationBanne
 import { ProfileView } from './components/profile/ProfileView.tsx';
 import { PhoneAuthModal } from './components/auth/PhoneAuthModal.tsx';
 import { CreateReadingModal } from './components/post/CreateReadingModal.tsx';
+import { PwaInstallPromptModal } from './components/pwa/PwaInstallPromptModal.tsx';
 import { BibleRealDB } from './services/storage.ts';
 import { simulateFriendReading } from './services/friendSimulator.ts';
 import type { UserProfile, ActiveTab, GroupNotification, ReadingPost } from './types/index.ts';
@@ -18,6 +19,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<ActiveTab>('feed');
   const [circleSubTab, setCircleSubTab] = useState<'snaps' | 'qa'>('snaps');
   const [isCaptureModalOpen, setIsCaptureModalOpen] = useState(false);
+  const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
   const [activeNotification, setActiveNotification] = useState<GroupNotification | null>(null);
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const [isFullWidth, setIsFullWidth] = useState(false);
@@ -114,6 +116,7 @@ export default function App() {
                 unreadCount={unreadCount}
                 onTabChange={setActiveTab}
                 onSimulateReading={handleSimulateReading}
+                onOpenInstall={() => setIsInstallModalOpen(true)}
               />
 
               {/* Sub-tab Pill Switcher for Circle View (Snaps vs Verse Q&A) */}
@@ -207,7 +210,11 @@ export default function App() {
                 )}
 
                 {activeTab === 'profile' && (
-                  <ProfileView user={currentUser} onLogout={handleLogout} />
+                  <ProfileView
+                    user={currentUser}
+                    onLogout={handleLogout}
+                    onOpenInstall={() => setIsInstallModalOpen(true)}
+                  />
                 )}
               </main>
 
@@ -228,6 +235,12 @@ export default function App() {
                 isOpen={isCaptureModalOpen}
                 onClose={() => setIsCaptureModalOpen(false)}
                 onPostCreated={handlePostCreated}
+              />
+
+              {/* PWA Mobile Add to Home Screen Prompt Modal */}
+              <PwaInstallPromptModal
+                isOpen={isInstallModalOpen}
+                onClose={() => setIsInstallModalOpen(false)}
               />
             </>
           )}

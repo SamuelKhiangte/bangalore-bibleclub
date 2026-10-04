@@ -1,4 +1,4 @@
-import { Phone, Flame, BookOpen, Users, LogOut } from 'lucide-react';
+import { Phone, Flame, BookOpen, Users, LogOut, Smartphone, Download } from 'lucide-react';
 import { BibleRealDB } from '../../services/storage.ts';
 import { calculateBibleProgress } from '../../services/bibleTracker.ts';
 import type { UserProfile } from '../../types/index.ts';
@@ -6,9 +6,10 @@ import type { UserProfile } from '../../types/index.ts';
 interface ProfileViewProps {
   user: UserProfile;
   onLogout: () => void;
+  onOpenInstall?: () => void;
 }
 
-export const ProfileView: React.FC<ProfileViewProps> = ({ user, onLogout }) => {
+export const ProfileView: React.FC<ProfileViewProps> = ({ user, onLogout, onOpenInstall }) => {
   const completedChapters = BibleRealDB.getCompletedChapters();
   const stats = calculateBibleProgress(completedChapters);
 
@@ -86,6 +87,56 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ user, onLogout }) => {
             <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Bible Completed</div>
           </div>
         </div>
+      </div>
+
+      {/* Install Mobile PWA Banner */}
+      <div
+        className="glass-panel"
+        style={{
+          padding: '16px 18px',
+          borderRadius: '20px',
+          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(243, 246, 243, 0.95) 100%)',
+          border: '1px solid var(--border-accent)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div
+            style={{
+              width: '38px',
+              height: '38px',
+              borderRadius: '12px',
+              backgroundColor: 'rgba(74, 124, 89, 0.15)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--accent-gold)'
+            }}
+          >
+            <Smartphone size={20} />
+          </div>
+          <div style={{ flex: 1 }}>
+            <h4 style={{ fontFamily: 'var(--font-display)', fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)' }}>
+              Install on Mobile (PWA)
+            </h4>
+            <p style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+              Add to Home Screen on iOS or Android for an instant, app-like experience without app stores.
+            </p>
+          </div>
+        </div>
+
+        {onOpenInstall && (
+          <button
+            onClick={onOpenInstall}
+            className="btn-primary"
+            style={{ width: '100%', padding: '10px', fontSize: '13px', borderRadius: '12px' }}
+          >
+            <Download size={14} />
+            <span>Add to Home Screen / Install</span>
+          </button>
+        )}
       </div>
 
       {/* Group Circle Info */}

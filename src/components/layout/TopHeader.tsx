@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, Flame, Bell, Sparkles } from 'lucide-react';
+import { BookOpen, Flame, Bell, Sparkles, Smartphone } from 'lucide-react';
 import type { UserProfile, ActiveTab } from '../../types/index.ts';
 
 interface TopHeaderProps {
@@ -8,6 +8,7 @@ interface TopHeaderProps {
   unreadCount: number;
   onTabChange: (tab: ActiveTab) => void;
   onSimulateReading: () => void;
+  onOpenInstall?: () => void;
 }
 
 export const TopHeader: React.FC<TopHeaderProps> = ({
@@ -15,7 +16,8 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
   activeTab,
   unreadCount,
   onTabChange,
-  onSimulateReading
+  onSimulateReading,
+  onOpenInstall
 }) => {
   return (
     <header
@@ -74,6 +76,31 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
 
       {/* Right Action Icons */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        {/* Install Mobile PWA Button */}
+        {onOpenInstall && (
+          <button
+            onClick={onOpenInstall}
+            title="Install App on Phone / Add to Home Screen"
+            style={{
+              background: 'rgba(74, 124, 89, 0.12)',
+              border: '1px solid var(--border-accent)',
+              borderRadius: '9999px',
+              padding: '4px 8px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              color: 'var(--accent-gold)',
+              fontSize: '11px',
+              fontWeight: 700,
+              cursor: 'pointer',
+              fontFamily: 'var(--font-display)'
+            }}
+          >
+            <Smartphone size={12} />
+            <span>Install</span>
+          </button>
+        )}
+
         {/* Simulate Reading Quick Button */}
         <button
           onClick={onSimulateReading}
