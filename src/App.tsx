@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { TopHeader } from './components/layout/TopHeader.tsx';
 import { BottomNav } from './components/layout/BottomNav.tsx';
 import { FeedView } from './components/feed/FeedView.tsx';
+import { VerseQAView } from './components/qa/VerseQAView.tsx';
 import { ProgressDashboard } from './components/progress/ProgressDashboard.tsx';
 import { NotificationDrawer } from './components/notifications/NotificationDrawer.tsx';
 import { NotificationBanner } from './components/notifications/NotificationBanner.tsx';
@@ -15,12 +16,12 @@ import type { UserProfile, ActiveTab, GroupNotification, ReadingPost } from './t
 export default function App() {
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(() => BibleRealDB.getUser());
   const [activeTab, setActiveTab] = useState<ActiveTab>('feed');
+  const [circleSubTab, setCircleSubTab] = useState<'snaps' | 'qa'>('snaps');
   const [isCaptureModalOpen, setIsCaptureModalOpen] = useState(false);
   const [activeNotification, setActiveNotification] = useState<GroupNotification | null>(null);
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const [isFullWidth, setIsFullWidth] = useState(false);
 
-  // Sync unread notification count
   const refreshUnread = () => {
     setUnreadCount(BibleRealDB.getUnreadNotificationsCount());
   };
@@ -30,7 +31,6 @@ export default function App() {
     const unsub = BibleRealDB.subscribe(() => {
       refreshUnread();
       if (currentUser) {
-        // sync user profile updates
         const updated = BibleRealDB.getUser();
         if (updated) setCurrentUser(updated);
       }
@@ -55,7 +55,6 @@ export default function App() {
   };
 
   const handlePostCreated = (post: ReadingPost) => {
-    // Show self notification
     setActiveNotification({
       id: `notif-self-${Date.now()}`,
       type: 'reading_completed',
@@ -66,6 +65,7 @@ export default function App() {
       timestamp: new Date().toISOString(),
       read: false
     });
+    setCircleSubTab('snaps');
     setActiveTab('feed');
   };
 
@@ -116,13 +116,80 @@ export default function App() {
                 onSimulateReading={handleSimulateReading}
               />
 
+              {/* Sub-tab Pill Switcher for Circle View (Snaps vs Verse Q&A) */}
+              {activeTab === 'feed' && (
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    padding: '8px 16px 2px',
+                    backgroundColor: 'var(--bg-app)',
+                    borderBottom: '1px solid var(--border-subtle)'
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      backgroundColor: 'rgba(255, 255, 255, 0.85)',
+                      padding: '3px',
+                      borderRadius: '9999px',
+                      border: '1px solid var(--border-subtle)',
+                      boxShadow: '0 2px 8px rgba(60, 45, 30, 0.04)'
+                    }}
+                  >
+                    <button
+                      onClick={() => setCircleSubTab('snaps')}
+                      style={{
+                        padding: '6px 16px',
+                        borderRadius: '9999px',
+                        border: 'none',
+                        background: circleSubTab === 'snaps' ? 'var(--accent-gold)' : 'transparent',
+                        color: circleSubTab === 'snaps' ? '#FFFFFF' : 'var(--text-secondary)',
+                        fontSize: '12px',
+                        fontWeight: 800,
+                        fontFamily: 'var(--font-display)',
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease'
+                      }}
+                    >
+                      📸 Reading Snaps
+                    </button>
+                    <button
+                      onClick={() => setCircleSubTab('qa')}
+                      style={{
+                        padding: '6px 16px',
+                        borderRadius: '9999px',
+                        border: 'none',
+                        background: circleSubTab === 'qa' ? 'var(--accent-gold)' : 'transparent',
+                        color: circleSubTab === 'qa' ? '#FFFFFF' : 'var(--text-secondary)',
+                        fontSize: '12px',
+                        fontWeight: 800,
+                        fontFamily: 'var(--font-display)',
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease'
+                      }}
+                    >
+                      💬 Verse Q&A
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* Main Content Area */}
               <main className="app-content-scroll">
-                {activeTab === 'feed' && (
+                {activeTab === 'feed' && circleSubTab === 'snaps' && (
                   <FeedView
                     currentUser={currentUser}
                     onOpenCreatePost={() => setIsCaptureModalOpen(true)}
                   />
+                )}
+
+                {activeTab === 'feed' && circleSubTab === 'qa' && (
+                  <VerseQAView currentUser={currentUser} />
+                )}
+
+                {activeTab === 'qa' && (
+                  <VerseQAView currentUser={currentUser} />
                 )}
 
                 {activeTab === 'progress' && (
@@ -131,7 +198,10 @@ export default function App() {
 
                 {activeTab === 'notifications' && (
                   <NotificationDrawer
-                    onSelectPost={() => setActiveTab('feed')}
+                    onSelectPost={() => {
+                      setCircleSubTab('snaps');
+                      setActiveTab('feed');
+                    }}
                     onTriggerSimulation={handleSimulateReading}
                   />
                 )}
@@ -144,7 +214,10 @@ export default function App() {
               {/* Bottom Navigation */}
               <BottomNav
                 activeTab={activeTab}
-                onTabChange={setActiveTab}
+                onTabChange={(tab) => {
+                  if (tab === 'feed') setCircleSubTab('snaps');
+                  setActiveTab(tab);
+                }}
                 onOpenCapture={() => setIsCaptureModalOpen(true)}
                 unreadCount={unreadCount}
               />

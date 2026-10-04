@@ -70,8 +70,8 @@ export const FeedView: React.FC<FeedViewProps> = ({ currentUser, onOpenCreatePos
           <div
             style={{
               position: 'relative',
-              width: '54px',
-              height: '54px',
+              width: '56px',
+              height: '56px',
               borderRadius: '50%',
               padding: '2px',
               border: hasPostedToday ? '2px solid var(--accent-emerald)' : '2px dashed var(--accent-gold)'
@@ -88,7 +88,7 @@ export const FeedView: React.FC<FeedViewProps> = ({ currentUser, onOpenCreatePos
                 bottom: '-2px',
                 right: '-2px',
                 backgroundColor: hasPostedToday ? 'var(--accent-emerald)' : 'var(--accent-gold)',
-                color: '#000',
+                color: '#fff',
                 borderRadius: '50%',
                 width: '18px',
                 height: '18px',
@@ -101,12 +101,12 @@ export const FeedView: React.FC<FeedViewProps> = ({ currentUser, onOpenCreatePos
               <Plus size={12} strokeWidth={3} />
             </div>
           </div>
-          <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>
+          <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', fontFamily: 'var(--font-display)' }}>
             {hasPostedToday ? 'Your Post' : 'Post Reading'}
           </span>
         </div>
 
-        {/* Friends Stories */}
+        {/* Friends Stories from Bangalore BibleClub */}
         {[
           { name: 'Sarah', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&auto=format&fit=crop&q=80', read: 'Hebrews 11', online: true },
           { name: 'David', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=80', read: 'John 1', online: true },
@@ -126,8 +126,8 @@ export const FeedView: React.FC<FeedViewProps> = ({ currentUser, onOpenCreatePos
             <div
               style={{
                 position: 'relative',
-                width: '54px',
-                height: '54px',
+                width: '56px',
+                height: '56px',
                 borderRadius: '50%',
                 padding: '2px',
                 border: '2px solid var(--accent-gold)'
@@ -144,16 +144,16 @@ export const FeedView: React.FC<FeedViewProps> = ({ currentUser, onOpenCreatePos
                     position: 'absolute',
                     bottom: '0',
                     right: '0',
-                    backgroundColor: '#10B981',
+                    backgroundColor: 'var(--accent-emerald)',
                     borderRadius: '50%',
                     width: '12px',
                     height: '12px',
-                    border: '2px solid #090D16'
+                    border: '2px solid #FFFFFF'
                   }}
                 />
               )}
             </div>
-            <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>
+            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', fontFamily: 'var(--font-display)' }}>
               {friend.name}
             </span>
           </div>
@@ -166,26 +166,27 @@ export const FeedView: React.FC<FeedViewProps> = ({ currentUser, onOpenCreatePos
           onClick={onOpenCreatePost}
           className="glass-panel"
           style={{
-            padding: '14px 16px',
+            padding: '16px 18px',
             marginBottom: '20px',
-            background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(16, 185, 129, 0.1) 100%)',
+            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(247, 244, 236, 0.95) 100%)',
             border: '1px solid var(--border-accent)',
+            borderRadius: '20px',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            boxShadow: '0 8px 24px rgba(245, 158, 11, 0.15)'
+            boxShadow: '0 8px 24px rgba(194, 94, 48, 0.1)'
           }}
         >
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Sparkles size={16} color="var(--accent-gold)" />
-              <span style={{ fontSize: '14px', fontWeight: 700, color: '#F8FAFC' }}>
+              <span style={{ fontSize: '14px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>
                 Time for Today's Bible Reading!
               </span>
             </div>
             <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '3px' }}>
-              Snap your start & end verse to keep your streak alive.
+              Snap your start & end verse to keep your reading streak alive.
             </p>
           </div>
 
@@ -213,9 +214,9 @@ export const FeedView: React.FC<FeedViewProps> = ({ currentUser, onOpenCreatePos
         {posts.length === 0 && (
           <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-secondary)' }}>
             <Users size={40} color="var(--accent-gold)" style={{ margin: '0 auto 12px' }} />
-            <h3 style={{ fontSize: '17px', fontWeight: 700, color: '#F8FAFC' }}>No posts yet today</h3>
+            <h3 style={{ fontSize: '17px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>No posts yet today</h3>
             <p style={{ fontSize: '13px', marginTop: '6px' }}>
-              Be the first in your reading circle to snap your Bible verse!
+              Be the first in Bangalore BibleClub to snap your reading journey!
             </p>
             <button
               className="btn-primary"

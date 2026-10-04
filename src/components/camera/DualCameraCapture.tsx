@@ -13,7 +13,6 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
   onPhotosCaptured,
   onCancel
 }) => {
-  // Step: 1 = snapping start verse, 2 = snapping end verse, 3 = review dual photos
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [startPhoto, setStartPhoto] = useState<string | null>(null);
   const [endPhoto, setEndPhoto] = useState<string | null>(null);
@@ -27,7 +26,6 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
-  // Initialize camera stream
   const startCamera = async (mode: 'environment' | 'user') => {
     stopCamera();
     setCameraError(null);
@@ -96,7 +94,6 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
       canvas.height = video.videoHeight || 800;
       const ctx = canvas.getContext('2d');
       if (ctx) {
-        // If front camera, mirror image for natural selfie/reading feel
         if (facingMode === 'user') {
           ctx.translate(canvas.width, 0);
           ctx.scale(-1, 1);
@@ -105,7 +102,6 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
         photoData = canvas.toDataURL('image/jpeg', 0.85);
       }
     } else {
-      // Fallback sample photo
       photoData = step === 1 ? SAMPLE_START_PHOTO : SAMPLE_END_PHOTO;
     }
 
@@ -156,7 +152,7 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        backgroundColor: '#050811',
+        backgroundColor: '#1E1B18',
         overflow: 'hidden'
       }}
     >
@@ -186,7 +182,7 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
         <button
           onClick={onCancel}
           style={{
-            background: 'rgba(255, 255, 255, 0.1)',
+            background: 'rgba(255, 255, 255, 0.15)',
             border: 'none',
             borderRadius: '50%',
             width: '36px',
@@ -205,30 +201,34 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
         <div
           className="glass-pill"
           style={{
-            padding: '6px 14px',
+            padding: '6px 16px',
             fontSize: '12px',
-            fontWeight: 700,
+            fontWeight: 800,
             display: 'flex',
             alignItems: 'center',
-            gap: '6px'
+            gap: '6px',
+            fontFamily: 'var(--font-display)',
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            color: '#fff',
+            borderColor: 'rgba(255, 255, 255, 0.25)'
           }}
         >
           {step === 1 && (
             <>
-              <span style={{ color: 'var(--accent-gold)' }}>● Step 1/2</span>
-              <span style={{ color: '#fff' }}>Start Verse</span>
+              <span style={{ color: '#FCD34D' }}>● Step 1/2</span>
+              <span>Start Verse</span>
             </>
           )}
           {step === 2 && (
             <>
-              <span style={{ color: 'var(--accent-emerald)' }}>● Step 2/2</span>
-              <span style={{ color: '#fff' }}>End Verse</span>
+              <span style={{ color: '#A7F3D0' }}>● Step 2/2</span>
+              <span>End Verse</span>
             </>
           )}
           {step === 3 && (
             <>
-              <span style={{ color: 'var(--accent-blue)' }}>● Preview</span>
-              <span style={{ color: '#fff' }}>Tap to Swap</span>
+              <span style={{ color: '#BAE6FD' }}>● Preview</span>
+              <span>Tap to Swap</span>
             </>
           )}
         </div>
@@ -238,7 +238,7 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
             onClick={toggleCameraFacing}
             title="Switch Camera"
             style={{
-              background: 'rgba(255, 255, 255, 0.1)',
+              background: 'rgba(255, 255, 255, 0.15)',
               border: 'none',
               borderRadius: '50%',
               width: '36px',
@@ -277,11 +277,10 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
               borderRadius: '28px',
               overflow: 'hidden',
               position: 'relative',
-              backgroundColor: '#090D18',
-              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08)'
+              backgroundColor: '#27231F',
+              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1)'
             }}
           >
-            {/* Live Video Element */}
             <video
               ref={videoRef}
               autoPlay
@@ -296,7 +295,6 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
               }}
             />
 
-            {/* Camera Inactive / Fallback UI */}
             {!cameraActive && (
               <div
                 style={{
@@ -308,7 +306,7 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
                   justifyContent: 'center',
                   padding: '24px',
                   textAlign: 'center',
-                  background: 'radial-gradient(circle at 50% 40%, #151F35 0%, #0A0F1D 100%)'
+                  background: 'radial-gradient(circle at 50% 40%, #302A24 0%, #1A1714 100%)'
                 }}
               >
                 <div
@@ -316,28 +314,28 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
                     width: '60px',
                     height: '60px',
                     borderRadius: '50%',
-                    backgroundColor: 'rgba(245, 158, 11, 0.15)',
+                    backgroundColor: 'rgba(194, 94, 48, 0.2)',
                     border: '1px solid var(--border-accent)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: 'var(--accent-gold)',
+                    color: 'var(--accent-gold-light)',
                     marginBottom: '14px'
                   }}
                 >
                   <Camera size={28} />
                 </div>
-                <h4 style={{ fontSize: '16px', fontWeight: 700, color: '#F8FAFC' }}>
+                <h4 style={{ fontSize: '16px', fontWeight: 800, color: '#F8FAFC', fontFamily: 'var(--font-display)' }}>
                   {step === 1 ? 'Point at Start Verse' : 'Point at End Verse'}
                 </h4>
-                <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginTop: '6px', maxWidth: '280px' }}>
+                <p style={{ fontSize: '13px', color: '#D4CDC5', marginTop: '6px', maxWidth: '280px' }}>
                   {cameraError || 'Hold your camera over the Bible passage you are reading.'}
                 </p>
 
                 <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
                   <button
                     className="btn-primary"
-                    style={{ padding: '8px 14px', fontSize: '12px', borderRadius: '20px' }}
+                    style={{ padding: '8px 16px', fontSize: '12px', borderRadius: '20px' }}
                     onClick={handleUseSamples}
                   >
                     <Sparkles size={13} />
@@ -347,12 +345,12 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
               </div>
             )}
 
-            {/* Target Crosshair / Scripture Framing Grid */}
+            {/* Target Crosshair */}
             <div
               style={{
                 position: 'absolute',
                 inset: '20px',
-                border: '1px dashed rgba(255, 255, 255, 0.25)',
+                border: '1px dashed rgba(255, 255, 255, 0.3)',
                 borderRadius: '16px',
                 pointerEvents: 'none',
                 display: 'flex',
@@ -361,31 +359,31 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px' }}>
-                <span style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.5)', fontWeight: 700 }}>┌</span>
-                <span style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.5)', fontWeight: 700 }}>┐</span>
+                <span style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.6)', fontWeight: 700 }}>┌</span>
+                <span style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.6)', fontWeight: 700 }}>┐</span>
               </div>
               <div
                 style={{
                   textAlign: 'center',
-                  background: 'rgba(0, 0, 0, 0.55)',
-                  padding: '4px 10px',
+                  background: 'rgba(30, 25, 20, 0.75)',
+                  padding: '5px 12px',
                   borderRadius: '12px',
                   alignSelf: 'center',
                   fontSize: '11px',
-                  fontWeight: 600,
+                  fontWeight: 700,
                   color: '#fff',
+                  fontFamily: 'var(--font-display)',
                   backdropFilter: 'blur(4px)'
                 }}
               >
                 {step === 1 ? '📖 Frame Starting Verse' : '📖 Frame Ending Verse'}
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px' }}>
-                <span style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.5)', fontWeight: 700 }}>└</span>
-                <span style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.5)', fontWeight: 700 }}>┘</span>
+                <span style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.6)', fontWeight: 700 }}>└</span>
+                <span style={{ fontSize: '10px', color: 'rgba(255, 255, 255, 0.6)', fontWeight: 700 }}>┘</span>
               </div>
             </div>
 
-            {/* Inset thumbnail showing start photo during Step 2 */}
             {step === 2 && startPhoto && (
               <div
                 style={{
@@ -396,12 +394,12 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
                   aspectRatio: '3 / 4',
                   borderRadius: '12px',
                   overflow: 'hidden',
-                  border: '2px solid #F59E0B',
-                  boxShadow: '0 6px 18px rgba(0, 0, 0, 0.6)'
+                  border: '2px solid #C25E30',
+                  boxShadow: '0 6px 18px rgba(0, 0, 0, 0.5)'
                 }}
               >
                 <img src={startPhoto} alt="Start verse" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                <div style={{ position: 'absolute', bottom: '2px', left: '2px', right: '2px', background: 'rgba(0,0,0,0.7)', fontSize: '8px', fontWeight: 700, textAlign: 'center', color: '#fff', borderRadius: '4px' }}>
+                <div style={{ position: 'absolute', bottom: '2px', left: '2px', right: '2px', background: 'rgba(0,0,0,0.7)', fontSize: '8px', fontWeight: 800, textAlign: 'center', color: '#fff', borderRadius: '4px' }}>
                   START
                 </div>
               </div>
@@ -416,7 +414,7 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
                 isInteractive={true}
               />
             )}
-            <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '12px', textAlign: 'center' }}>
+            <p style={{ fontSize: '12px', color: '#D4CDC5', marginTop: '12px', textAlign: 'center', fontWeight: 600 }}>
               💡 <em>Tap the small thumbnail in the top-left to swap views!</em>
             </p>
           </div>
@@ -435,7 +433,6 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
       >
         {step < 3 ? (
           <>
-            {/* Gallery Upload Button */}
             <input
               ref={fileInputRef}
               type="file"
@@ -450,8 +447,8 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
                 width: '46px',
                 height: '46px',
                 borderRadius: '50%',
-                background: 'rgba(255, 255, 255, 0.08)',
-                border: '1px solid var(--border-subtle)',
+                background: 'rgba(255, 255, 255, 0.12)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -475,7 +472,7 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
-                boxShadow: '0 0 24px rgba(255, 255, 255, 0.3)',
+                boxShadow: '0 0 24px rgba(255, 255, 255, 0.35)',
                 transition: 'transform 0.15s ease'
               }}
             >
@@ -490,7 +487,6 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
               />
             </div>
 
-            {/* Sample Photo Preset Quick Button */}
             <button
               onClick={handleUseSamples}
               title="Use sample verse photo"
@@ -498,12 +494,12 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
                 width: '46px',
                 height: '46px',
                 borderRadius: '50%',
-                background: 'rgba(245, 158, 11, 0.15)',
+                background: 'rgba(194, 94, 48, 0.2)',
                 border: '1px solid var(--border-accent)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: 'var(--accent-gold)',
+                color: 'var(--accent-gold-light)',
                 cursor: 'pointer'
               }}
             >
@@ -514,7 +510,7 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
           <div style={{ display: 'flex', gap: '12px', width: '100%' }}>
             <button
               className="btn-secondary"
-              style={{ flex: 1, padding: '14px' }}
+              style={{ flex: 1, padding: '14px', backgroundColor: 'rgba(255, 255, 255, 0.2)', color: '#fff', border: '1px solid rgba(255, 255, 255, 0.3)' }}
               onClick={handleRetake}
             >
               <RotateCcw size={16} />

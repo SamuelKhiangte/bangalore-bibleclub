@@ -24,12 +24,12 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
       <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
         <defs>
           <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#FCD34D" />
-            <stop offset="50%" stopColor="#F59E0B" />
-            <stop offset="100%" stopColor="#10B981" />
+            <stop offset="0%" stopColor="#C25E30" />
+            <stop offset="50%" stopColor="#D97706" />
+            <stop offset="100%" stopColor="#437A5C" />
           </linearGradient>
           <filter id="glow">
-            <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
             <feMerge>
               <feMergeNode in="coloredBlur" />
               <feMergeNode in="SourceGraphic" />
@@ -42,7 +42,7 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke="rgba(255, 255, 255, 0.08)"
+          stroke="rgba(184, 168, 146, 0.25)"
           strokeWidth={strokeWidth}
           fill="transparent"
         />
@@ -79,17 +79,17 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
           className="text-gold-gradient"
           style={{
             fontFamily: 'var(--font-display)',
-            fontSize: '32px',
+            fontSize: '34px',
             fontWeight: 800,
             lineHeight: 1
           }}
         >
           {percentage}%
         </span>
-        <span style={{ fontSize: '12px', fontWeight: 700, color: '#F8FAFC', marginTop: '6px' }}>
+        <span style={{ fontSize: '13px', fontWeight: 800, color: 'var(--text-primary)', marginTop: '6px', fontFamily: 'var(--font-display)' }}>
           {chaptersRead} / {totalChapters}
         </span>
-        <span style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.6px' }}>
+        <span style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.6px', fontWeight: 700 }}>
           Chapters Read
         </span>
       </div>

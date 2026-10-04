@@ -46,11 +46,11 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 800, color: '#F8FAFC' }}>
-            Group Notifications
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)' }}>
+            Club Notifications
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginTop: '2px' }}>
-            Live updates when reading circle members finish verses
+            Live updates when members in Bangalore finish reading
           </p>
         </div>
 
@@ -66,7 +66,8 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '4px'
+              gap: '4px',
+              fontFamily: 'var(--font-display)'
             }}
           >
             <CheckCheck size={14} />
@@ -82,14 +83,14 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
           className="glass-panel"
           style={{
             padding: '14px 16px',
-            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
             border: '1px solid var(--border-accent)',
-            borderRadius: '16px',
+            borderRadius: '18px',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            boxShadow: '0 4px 16px rgba(245, 158, 11, 0.15)'
+            boxShadow: '0 4px 16px rgba(194, 94, 48, 0.1)'
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -97,8 +98,8 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
               style={{
                 width: '36px',
                 height: '36px',
-                borderRadius: '10px',
-                backgroundColor: 'rgba(245, 158, 11, 0.25)',
+                borderRadius: '12px',
+                backgroundColor: 'rgba(194, 94, 48, 0.15)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -108,7 +109,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
               <Sparkles size={18} />
             </div>
             <div>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: '#F8FAFC' }}>
+              <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>
                 Simulate Friend Reading
               </div>
               <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
@@ -119,12 +120,13 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
 
           <span
             style={{
-              padding: '6px 12px',
+              padding: '6px 14px',
               backgroundColor: 'var(--accent-gold)',
-              color: '#000',
+              color: '#FFFFFF',
               borderRadius: '9999px',
               fontSize: '11px',
-              fontWeight: 800
+              fontWeight: 800,
+              fontFamily: 'var(--font-display)'
             }}
           >
             Trigger
@@ -146,9 +148,10 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
               alignItems: 'center',
               gap: '12px',
               cursor: notif.postId ? 'pointer' : 'default',
-              backgroundColor: notif.read ? 'rgba(255, 255, 255, 0.03)' : 'rgba(26, 36, 56, 0.85)',
+              backgroundColor: notif.read ? 'rgba(255, 255, 255, 0.6)' : '#FFFFFF',
               border: notif.read ? '1px solid var(--border-subtle)' : '1px solid var(--border-accent)',
-              position: 'relative'
+              position: 'relative',
+              boxShadow: notif.read ? 'none' : '0 4px 14px rgba(194, 94, 48, 0.08)'
             }}
           >
             {/* Unread Glowing Dot */}
@@ -161,8 +164,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
                   width: '8px',
                   height: '8px',
                   borderRadius: '50%',
-                  backgroundColor: 'var(--accent-gold)',
-                  boxShadow: '0 0 8px var(--accent-gold)'
+                  backgroundColor: 'var(--accent-gold)'
                 }}
               />
             )}
@@ -181,8 +183,8 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
                   width: '18px',
                   height: '18px',
                   borderRadius: '50%',
-                  backgroundColor: '#10B981',
-                  color: '#000',
+                  backgroundColor: 'var(--accent-emerald)',
+                  color: '#FFFFFF',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
@@ -193,10 +195,10 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
             </div>
 
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: '13px', fontWeight: notif.read ? 600 : 700, color: notif.read ? 'var(--text-secondary)' : '#F8FAFC', lineHeight: 1.4 }}>
+              <div style={{ fontSize: '13px', fontWeight: notif.read ? 600 : 800, color: 'var(--text-primary)', lineHeight: 1.4 }}>
                 {notif.message}
               </div>
-              <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
+              <div style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '3px' }}>
                 {timeAgo(notif.timestamp)}
               </div>
             </div>
@@ -205,8 +207,8 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
 
         {notifications.length === 0 && (
           <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-muted)' }}>
-            <Bell size={40} style={{ margin: '0 auto 12px', opacity: 0.5 }} />
-            <h4 style={{ color: '#fff', fontSize: '15px' }}>No notifications yet</h4>
+            <Bell size={40} style={{ margin: '0 auto 12px', opacity: 0.4 }} />
+            <h4 style={{ color: 'var(--text-primary)', fontSize: '16px', fontFamily: 'var(--font-display)' }}>No notifications yet</h4>
             <p style={{ fontSize: '12px', marginTop: '4px' }}>
               Notifications from your reading group will show here.
             </p>

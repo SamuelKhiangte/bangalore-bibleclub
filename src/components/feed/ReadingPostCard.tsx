@@ -41,11 +41,12 @@ export const ReadingPostCard: React.FC<ReadingPostCardProps> = ({
     <div
       className="glass-panel"
       style={{
-        borderRadius: '24px',
+        borderRadius: '26px',
         overflow: 'hidden',
         marginBottom: '20px',
-        backgroundColor: 'rgba(16, 23, 38, 0.75)',
-        border: '1px solid var(--border-subtle)'
+        backgroundColor: '#FFFFFF',
+        border: '1px solid var(--border-subtle)',
+        boxShadow: '0 6px 20px rgba(60, 45, 30, 0.06)'
       }}
     >
       {/* Post Header */}
@@ -62,8 +63,8 @@ export const ReadingPostCard: React.FC<ReadingPostCardProps> = ({
             src={post.userAvatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80'}
             alt={post.userName}
             style={{
-              width: '40px',
-              height: '40px',
+              width: '42px',
+              height: '42px',
               borderRadius: '50%',
               objectFit: 'cover',
               border: '2px solid var(--border-accent)'
@@ -71,7 +72,7 @@ export const ReadingPostCard: React.FC<ReadingPostCardProps> = ({
           />
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ fontSize: '14px', fontWeight: 700, color: '#F8FAFC' }}>
+              <span style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>
                 {post.userName}
               </span>
               <div
@@ -79,8 +80,8 @@ export const ReadingPostCard: React.FC<ReadingPostCardProps> = ({
                   display: 'flex',
                   alignItems: 'center',
                   gap: '2px',
-                  backgroundColor: 'rgba(245, 158, 11, 0.15)',
-                  padding: '2px 6px',
+                  backgroundColor: 'rgba(194, 94, 48, 0.12)',
+                  padding: '2px 7px',
                   borderRadius: '9999px',
                   fontSize: '10px',
                   fontWeight: 800,
@@ -97,7 +98,7 @@ export const ReadingPostCard: React.FC<ReadingPostCardProps> = ({
               </span>
               <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>•</span>
               <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                <Clock size={10} />
+                <Clock size={11} />
                 {post.durationMinutes}m read
               </span>
             </div>
@@ -110,13 +111,14 @@ export const ReadingPostCard: React.FC<ReadingPostCardProps> = ({
             display: 'flex',
             alignItems: 'center',
             gap: '5px',
-            background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(16, 185, 129, 0.15))',
+            background: 'linear-gradient(135deg, rgba(194, 94, 48, 0.12), rgba(67, 122, 92, 0.12))',
             border: '1px solid var(--border-accent)',
             borderRadius: '9999px',
-            padding: '5px 10px',
+            padding: '5px 12px',
             color: 'var(--accent-gold)',
             fontSize: '12px',
-            fontWeight: 700
+            fontWeight: 800,
+            fontFamily: 'var(--font-display)'
           }}
         >
           <BookOpen size={13} />
@@ -140,12 +142,12 @@ export const ReadingPostCard: React.FC<ReadingPostCardProps> = ({
         <div
           style={{
             margin: '12px 14px 0',
-            padding: '10px 14px',
-            borderRadius: '12px',
-            backgroundColor: 'rgba(255, 255, 255, 0.04)',
+            padding: '12px 16px',
+            borderRadius: '14px',
+            backgroundColor: '#F9F7F1',
             borderLeft: '3px solid var(--accent-gold)',
             fontSize: '13px',
-            lineHeight: '1.45',
+            lineHeight: '1.5',
             color: 'var(--text-secondary)',
             fontStyle: 'italic'
           }}

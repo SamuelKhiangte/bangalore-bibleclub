@@ -12,8 +12,8 @@ describe('E2E BibleReal App Flow', () => {
   it('renders PhoneAuthModal when unauthenticated, and completes login flow', async () => {
     render(React.createElement(App));
 
-    expect(screen.getByText('BibleReal')).toBeDefined();
-    expect(screen.getByPlaceholderText('555 123 4567')).toBeDefined();
+    expect(screen.getByText('Bangalore BibleClub')).toBeDefined();
+    expect(screen.getByPlaceholderText('98450 12345')).toBeDefined();
 
     // Click Send Verification Code
     const sendBtn = screen.getByText('Send Verification Code');
@@ -58,7 +58,7 @@ describe('E2E BibleReal App Flow', () => {
     render(React.createElement(App));
 
     // Should show TopHeader with name / brand
-    expect(screen.getByText('BibleReal')).toBeDefined();
+    expect(screen.getByText('Bangalore BibleClub')).toBeDefined();
     expect(screen.getByText('4')).toBeDefined(); // Streak flame
 
     // Check BottomNav buttons
@@ -78,7 +78,7 @@ describe('E2E BibleReal App Flow', () => {
     // Navigate to Alerts
     fireEvent.click(screen.getByText('Alerts'));
     await waitFor(() => {
-      expect(screen.getByText('Group Notifications')).toBeDefined();
+      expect(screen.getByText('Club Notifications')).toBeDefined();
       expect(screen.getByText('Simulate Friend Reading')).toBeDefined();
     });
   });

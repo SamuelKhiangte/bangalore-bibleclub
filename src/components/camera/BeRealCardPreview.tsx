@@ -18,8 +18,6 @@ export const BeRealCardPreview: React.FC<BeRealCardPreviewProps> = ({
   endLabel = 'End Verse',
   aspectRatio = '4 / 5'
 }) => {
-  // isSwapped: false means startPhoto is main and endPhoto is inset.
-  // true means endPhoto is main and startPhoto is inset.
   const [isSwapped, setIsSwapped] = useState(false);
 
   const mainPhoto = isSwapped ? endPhoto : startPhoto;
@@ -42,8 +40,8 @@ export const BeRealCardPreview: React.FC<BeRealCardPreviewProps> = ({
         position: 'relative',
         borderRadius: '24px',
         overflow: 'hidden',
-        boxShadow: '0 16px 36px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.1)',
-        backgroundColor: '#0A0F1D'
+        boxShadow: '0 12px 30px rgba(60, 45, 30, 0.12), 0 0 0 1px rgba(184, 168, 146, 0.3)',
+        backgroundColor: '#EAE3D5'
       }}
     >
       {/* Main Full Photo */}
@@ -65,19 +63,20 @@ export const BeRealCardPreview: React.FC<BeRealCardPreviewProps> = ({
           position: 'absolute',
           bottom: '12px',
           left: '12px',
-          background: 'rgba(0, 0, 0, 0.75)',
+          background: 'rgba(39, 34, 30, 0.8)',
           backdropFilter: 'blur(8px)',
           borderRadius: '8px',
           padding: '4px 10px',
           fontSize: '11px',
-          fontWeight: 700,
-          color: isSwapped ? 'var(--accent-emerald)' : 'var(--accent-gold)',
+          fontWeight: 800,
+          color: isSwapped ? '#A7F3D0' : '#FDE68A',
           letterSpacing: '0.6px',
           textTransform: 'uppercase',
           display: 'flex',
           alignItems: 'center',
           gap: '4px',
-          border: '1px solid rgba(255, 255, 255, 0.15)'
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          fontFamily: 'var(--font-display)'
         }}
       >
         <span>{mainLabel}</span>
@@ -96,8 +95,8 @@ export const BeRealCardPreview: React.FC<BeRealCardPreviewProps> = ({
           aspectRatio: '3 / 4',
           borderRadius: '14px',
           overflow: 'hidden',
-          border: '2px solid rgba(255, 255, 255, 0.95)',
-          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.75)',
+          border: '2px solid #FFFFFF',
+          boxShadow: '0 8px 24px rgba(60, 45, 30, 0.25)',
           cursor: isInteractive ? 'pointer' : 'default',
           zIndex: 15
         }}
@@ -116,7 +115,7 @@ export const BeRealCardPreview: React.FC<BeRealCardPreviewProps> = ({
               position: 'absolute',
               top: '4px',
               right: '4px',
-              backgroundColor: 'rgba(0, 0, 0, 0.65)',
+              backgroundColor: 'rgba(30, 25, 20, 0.7)',
               borderRadius: '50%',
               width: '18px',
               height: '18px',

@@ -1,39 +1,43 @@
 :root {
-  --bg-app: #080C15;
-  --bg-surface: #101726;
-  --bg-card: rgba(22, 30, 48, 0.75);
-  --bg-card-hover: rgba(30, 41, 65, 0.85);
-  --bg-glass: rgba(16, 23, 38, 0.65);
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-accent: rgba(245, 158, 11, 0.35);
-  --border-emerald: rgba(16, 185, 129, 0.3);
+  /* Relaxing Warm Beige & Neutral Palette */
+  --bg-app: #F7F4EC;
+  --bg-surface: #FFFFFF;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --bg-card-hover: rgba(250, 247, 240, 0.98);
+  --bg-glass: rgba(255, 255, 255, 0.75);
+  
+  --border-subtle: rgba(184, 168, 146, 0.25);
+  --border-accent: rgba(194, 94, 48, 0.35);
+  --border-emerald: rgba(67, 122, 92, 0.3);
 
-  --accent-gold: #F59E0B;
-  --accent-gold-light: #FCD34D;
-  --accent-gold-glow: rgba(245, 158, 11, 0.25);
-  --accent-emerald: #10B981;
-  --accent-emerald-glow: rgba(16, 185, 129, 0.25);
-  --accent-blue: #38BDF8;
-  --accent-rose: #F43F5E;
-  --accent-purple: #A855F7;
+  /* Calming Accents: Terracotta, Warm Honey, Sage, Dusty Rose */
+  --accent-gold: #C25E30; /* Warm Terracotta */
+  --accent-gold-light: #E08256;
+  --accent-gold-glow: rgba(194, 94, 48, 0.2);
+  --accent-emerald: #437A5C; /* Calming Sage */
+  --accent-emerald-glow: rgba(67, 122, 92, 0.2);
+  --accent-blue: #4A7A96; /* Slate Blue */
+  --accent-rose: #C24B5E; /* Dusty Rose */
+  --accent-purple: #7E6B8F; /* Soft Lavender Gray */
 
-  --text-primary: #F8FAFC;
-  --text-secondary: #94A3B8;
-  --text-muted: #64748B;
-  --text-accent: #FBBF24;
+  /* Relaxed Neutral Typography */
+  --text-primary: #2C2520; /* Deep Warm Espresso */
+  --text-secondary: #63574E; /* Gentle Cocoa */
+  --text-muted: #94877B; /* Warm Oat */
+  --text-accent: #C25E30;
 
-  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'Outfit', sans-serif;
-  --font-serif: 'Cinzel', serif;
+  /* Informal & Relaxed Rounded Fonts */
+  --font-main: 'Nunito', 'Plus Jakarta Sans', -apple-system, sans-serif;
+  --font-display: 'Quicksand', 'Nunito', sans-serif;
 
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
   --radius-full: 9999px;
 
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
-  --shadow-glow: 0 0 24px rgba(245, 158, 11, 0.2);
+  --shadow-sm: 0 2px 8px rgba(60, 45, 30, 0.05);
+  --shadow-md: 0 10px 28px rgba(60, 45, 30, 0.08);
+  --shadow-glow: 0 0 24px rgba(194, 94, 48, 0.15);
 }
 
 * {
@@ -44,7 +48,7 @@
 }
 
 html, body {
-  background-color: #04060A;
+  background-color: #EDE8DE;
   color: var(--text-primary);
   font-family: var(--font-main);
   min-height: 100vh;
@@ -62,11 +66,11 @@ html, body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(148, 135, 123, 0.35);
   border-radius: var(--radius-full);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(245, 158, 11, 0.4);
+  background: rgba(194, 94, 48, 0.5);
 }
 
 /* Desktop App Container & Phone Mockup */
@@ -76,8 +80,8 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px 10px;
-  background: radial-gradient(circle at 50% 20%, #151F33 0%, #080C15 65%, #030508 100%);
+  padding: 24px 12px;
+  background: radial-gradient(circle at 50% 15%, #F5F1E6 0%, #E8E2D3 65%, #DDD5C4 100%);
   position: relative;
 }
 
@@ -95,33 +99,34 @@ html, body {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(16, 23, 38, 0.85);
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(12px);
   border: 1px solid var(--border-accent);
   border-radius: var(--radius-full);
-  padding: 6px 14px;
-  font-size: 12px;
-  font-weight: 600;
+  padding: 7px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font-display);
   color: var(--accent-gold);
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 16px rgba(60, 45, 30, 0.08);
   transition: all 0.2s ease;
 }
 .viewport-mode-toggle:hover {
   transform: translateY(-1px);
-  background: rgba(245, 158, 11, 0.15);
+  background: #FFFBF5;
 }
 
-/* Phone Bezel Frame */
+/* Phone Bezel Frame - Soft warm ceramic/clay tone */
 .phone-frame {
   width: 100%;
   max-width: 430px;
   height: 880px;
   max-height: 92vh;
   background-color: var(--bg-app);
-  border-radius: 48px;
-  border: 11px solid #1E293B;
-  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1), 0 0 35px var(--accent-gold-glow);
+  border-radius: 46px;
+  border: 10px solid #DFD6C8;
+  box-shadow: 0 25px 60px -15px rgba(80, 60, 40, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.7), 0 0 30px rgba(194, 94, 48, 0.08);
   position: relative;
   overflow: hidden;
   display: flex;
@@ -145,7 +150,7 @@ html, body {
   justify-content: space-between;
   padding: 0 24px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-secondary);
   z-index: 50;
   background: transparent;
@@ -155,7 +160,7 @@ html, body {
 .phone-island {
   width: 90px;
   height: 20px;
-  background: #000;
+  background: #2C2520;
   border-radius: 20px;
   display: flex;
   align-items: center;
@@ -166,8 +171,8 @@ html, body {
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: #0D1628;
-  border: 1px solid #1E293B;
+  background: #181411;
+  border: 1px solid #433932;
 }
 
 /* Main App Shell Content */
@@ -194,33 +199,34 @@ html, body {
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
 }
 
 .glass-pill {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-full);
 }
 
-/* Gold Gradient text */
+/* Relaxing Warm Terracotta Gradient text */
 .text-gold-gradient {
-  background: linear-gradient(135deg, #FDE68A 0%, #F59E0B 50%, #D97706 100%);
+  background: linear-gradient(135deg, #C25E30 0%, #D97706 60%, #B45309 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Emerald Gradient text */
+/* Sage Gradient text */
 .text-emerald-gradient {
-  background: linear-gradient(135deg, #A7F3D0 0%, #10B981 50%, #059669 100%);
+  background: linear-gradient(135deg, #437A5C 0%, #2D5840 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 /* Button styles */
 .btn-primary {
-  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
-  color: #050811;
+  background: linear-gradient(135deg, #C25E30 0%, #A84920 100%);
+  color: #FFFFFF;
   font-family: var(--font-display);
   font-weight: 700;
   border: none;
@@ -232,22 +238,22 @@ html, body {
   justify-content: center;
   gap: 8px;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+  box-shadow: 0 4px 14px rgba(194, 94, 48, 0.25);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .btn-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45);
+  box-shadow: 0 6px 20px rgba(194, 94, 48, 0.35);
 }
 .btn-primary:active {
   transform: translateY(1px);
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.8);
   color: var(--text-primary);
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 700;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   padding: 10px 18px;
@@ -260,8 +266,8 @@ html, body {
   transition: all 0.2s ease;
 }
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: #FFFFFF;
+  border-color: rgba(184, 168, 146, 0.4);
 }
 
 /* BeReal Tap-to-Swap Flip animation */
@@ -271,8 +277,9 @@ html, body {
   aspect-ratio: 4 / 5;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  background: #0B111E;
+  background: #EAE3D5;
   box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-subtle);
 }
 
 .bereal-main-photo {
@@ -290,8 +297,8 @@ html, body {
   aspect-ratio: 3 / 4;
   border-radius: var(--radius-md);
   overflow: hidden;
-  border: 2px solid rgba(255, 255, 255, 0.9);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 6px 18px rgba(60, 45, 30, 0.2);
   cursor: pointer;
   z-index: 10;
   transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -310,7 +317,7 @@ html, body {
   bottom: 6px;
   left: 6px;
   right: 6px;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(44, 37, 32, 0.75);
   backdrop-filter: blur(4px);
   border-radius: 6px;
   font-size: 9px;
@@ -329,8 +336,8 @@ html, body {
 }
 
 @keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.3); }
-  50% { box-shadow: 0 0 25px rgba(245, 158, 11, 0.6); }
+  0%, 100% { box-shadow: 0 0 15px rgba(194, 94, 48, 0.15); }
+  50% { box-shadow: 0 0 25px rgba(194, 94, 48, 0.3); }
 }
 
 @keyframes floatBounce {

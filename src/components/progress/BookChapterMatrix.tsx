@@ -32,10 +32,11 @@ export const BookChapterMatrix: React.FC<BookChapterMatrixProps> = ({
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            padding: '8px 12px',
-            borderRadius: '12px',
-            backgroundColor: 'rgba(255, 255, 255, 0.05)',
-            border: '1px solid var(--border-subtle)'
+            padding: '10px 14px',
+            borderRadius: '14px',
+            backgroundColor: '#FFFFFF',
+            border: '1px solid var(--border-subtle)',
+            boxShadow: '0 2px 6px rgba(60, 45, 30, 0.04)'
           }}
         >
           <Search size={14} color="var(--text-muted)" />
@@ -48,9 +49,11 @@ export const BookChapterMatrix: React.FC<BookChapterMatrixProps> = ({
               background: 'none',
               border: 'none',
               outline: 'none',
-              color: '#fff',
+              color: 'var(--text-primary)',
               fontSize: '13px',
-              width: '100%'
+              width: '100%',
+              fontFamily: 'var(--font-main)',
+              fontWeight: 600
             }}
           />
         </div>
@@ -61,14 +64,16 @@ export const BookChapterMatrix: React.FC<BookChapterMatrixProps> = ({
               key={t}
               onClick={() => setActiveTab(t)}
               style={{
-                padding: '8px 12px',
-                borderRadius: '10px',
+                padding: '10px 14px',
+                borderRadius: '12px',
                 border: 'none',
-                background: activeTab === t ? 'var(--accent-gold)' : 'rgba(255, 255, 255, 0.06)',
-                color: activeTab === t ? '#000' : 'var(--text-secondary)',
-                fontWeight: 700,
+                background: activeTab === t ? 'var(--accent-gold)' : '#FFFFFF',
+                color: activeTab === t ? '#FFFFFF' : 'var(--text-secondary)',
+                fontWeight: 800,
                 fontSize: '12px',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                fontFamily: 'var(--font-display)',
+                boxShadow: '0 2px 6px rgba(60, 45, 30, 0.04)'
               }}
             >
               {t}
@@ -91,39 +96,41 @@ export const BookChapterMatrix: React.FC<BookChapterMatrixProps> = ({
               onClick={() => setSelectedBook(book)}
               className="glass-panel"
               style={{
-                padding: '12px 14px',
+                padding: '12px 16px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 cursor: 'pointer',
                 border: isComplete ? '1px solid var(--border-emerald)' : '1px solid var(--border-subtle)',
+                backgroundColor: '#FFFFFF',
                 transition: 'all 0.15s ease'
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <div
                   style={{
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '8px',
-                    backgroundColor: isComplete ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.12)',
+                    width: '34px',
+                    height: '34px',
+                    borderRadius: '10px',
+                    backgroundColor: isComplete ? 'rgba(67, 122, 92, 0.15)' : 'rgba(194, 94, 48, 0.1)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     color: isComplete ? 'var(--accent-emerald)' : 'var(--accent-gold)',
-                    fontWeight: 700,
-                    fontSize: '12px'
+                    fontWeight: 800,
+                    fontSize: '12px',
+                    fontFamily: 'var(--font-display)'
                   }}
                 >
-                  {isComplete ? <CheckCircle2 size={16} /> : book.abbreviation.slice(0, 3)}
+                  {isComplete ? <CheckCircle2 size={18} /> : book.abbreviation.slice(0, 3)}
                 </div>
 
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span style={{ fontSize: '14px', fontWeight: 700, color: '#F8FAFC' }}>
+                    <span style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>
                       {book.name}
                     </span>
-                    <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
+                    <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 600 }}>
                       ({book.genre})
                     </span>
                   </div>
@@ -131,9 +138,9 @@ export const BookChapterMatrix: React.FC<BookChapterMatrixProps> = ({
                     <div
                       style={{
                         width: '80px',
-                        height: '4px',
-                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                        borderRadius: '2px',
+                        height: '5px',
+                        backgroundColor: '#EDE8DE',
+                        borderRadius: '3px',
                         overflow: 'hidden'
                       }}
                     >
@@ -145,7 +152,7 @@ export const BookChapterMatrix: React.FC<BookChapterMatrixProps> = ({
                         }}
                       />
                     </div>
-                    <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
+                    <span style={{ fontSize: '11px', color: 'var(--text-secondary)', fontWeight: 600 }}>
                       {readCount}/{book.chaptersCount} chs
                     </span>
                   </div>
@@ -153,7 +160,7 @@ export const BookChapterMatrix: React.FC<BookChapterMatrixProps> = ({
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--text-muted)' }}>
-                <span style={{ fontSize: '12px', fontWeight: 600 }}>{pct}%</span>
+                <span style={{ fontSize: '12px', fontWeight: 700, fontFamily: 'var(--font-display)' }}>{pct}%</span>
                 <ChevronRight size={16} />
               </div>
             </div>
@@ -167,7 +174,7 @@ export const BookChapterMatrix: React.FC<BookChapterMatrixProps> = ({
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.75)',
+            backgroundColor: 'rgba(40, 32, 26, 0.65)',
             backdropFilter: 'blur(10px)',
             zIndex: 300,
             display: 'flex',
@@ -178,14 +185,15 @@ export const BookChapterMatrix: React.FC<BookChapterMatrixProps> = ({
         >
           <div
             style={{
-              backgroundColor: '#0F172A',
-              borderTopLeftRadius: '24px',
-              borderTopRightRadius: '24px',
+              backgroundColor: '#FAF7F0',
+              borderTopLeftRadius: '28px',
+              borderTopRightRadius: '28px',
               border: '1px solid var(--border-subtle)',
               maxHeight: '80vh',
               display: 'flex',
               flexDirection: 'column',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              boxShadow: '0 -10px 40px rgba(60, 45, 30, 0.2)'
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -195,14 +203,15 @@ export const BookChapterMatrix: React.FC<BookChapterMatrixProps> = ({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                padding: '16px 20px',
-                borderBottom: '1px solid var(--border-subtle)'
+                padding: '18px 20px',
+                borderBottom: '1px solid var(--border-subtle)',
+                backgroundColor: '#FFFFFF'
               }}
             >
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <BookOpen size={18} color="var(--accent-gold)" />
-                  <h3 style={{ fontSize: '17px', fontWeight: 700, color: '#F8FAFC' }}>
+                  <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>
                     {selectedBook.name}
                   </h3>
                 </div>
@@ -246,11 +255,11 @@ export const BookChapterMatrix: React.FC<BookChapterMatrixProps> = ({
                     onClick={() => onToggleChapter(selectedBook.id, ch)}
                     style={{
                       aspectRatio: '1',
-                      borderRadius: '12px',
+                      borderRadius: '14px',
                       border: isRead ? '1px solid var(--accent-emerald)' : '1px solid var(--border-subtle)',
-                      backgroundColor: isRead ? 'rgba(16, 185, 129, 0.25)' : 'rgba(255, 255, 255, 0.05)',
-                      color: isRead ? '#A7F3D0' : '#F8FAFC',
-                      fontWeight: 700,
+                      backgroundColor: isRead ? 'rgba(67, 122, 92, 0.18)' : '#FFFFFF',
+                      color: isRead ? 'var(--accent-emerald)' : 'var(--text-primary)',
+                      fontWeight: 800,
                       fontSize: '14px',
                       fontFamily: 'var(--font-display)',
                       display: 'flex',
@@ -258,7 +267,7 @@ export const BookChapterMatrix: React.FC<BookChapterMatrixProps> = ({
                       alignItems: 'center',
                       justifyContent: 'center',
                       cursor: 'pointer',
-                      boxShadow: isRead ? '0 0 10px rgba(16, 185, 129, 0.25)' : 'none',
+                      boxShadow: isRead ? '0 0 10px rgba(67, 122, 92, 0.2)' : '0 2px 6px rgba(60, 45, 30, 0.04)',
                       transition: 'all 0.15s ease'
                     }}
                   >

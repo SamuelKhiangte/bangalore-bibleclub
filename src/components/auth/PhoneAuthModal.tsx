@@ -11,20 +11,19 @@ interface PhoneAuthModalProps {
 }
 
 const COUNTRY_CODES = [
+  { code: '+91', flag: '🇮🇳', name: 'India (Bangalore)' },
   { code: '+1', flag: '🇺🇸', name: 'United States / Canada' },
   { code: '+44', flag: '🇬🇧', name: 'United Kingdom' },
-  { code: '+91', flag: '🇮🇳', name: 'India' },
   { code: '+61', flag: '🇦🇺', name: 'Australia' },
   { code: '+234', flag: '🇳🇬', name: 'Nigeria' },
-  { code: '+63', flag: '🇵🇭', name: 'Philippines' },
-  { code: '+82', flag: '🇰🇷', name: 'South Korea' },
-  { code: '+55', flag: '🇧🇷', name: 'Brazil' }
+  { code: '+65', flag: '🇸🇬', name: 'Singapore' },
+  { code: '+971', flag: '🇦🇪', name: 'UAE' }
 ];
 
 export const PhoneAuthModal: React.FC<PhoneAuthModalProps> = ({ onLoginSuccess }) => {
   const [step, setStep] = useState<'phone' | 'otp' | 'profile'>('phone');
-  const [selectedCountry, setSelectedCountry] = useState('+1');
-  const [phoneDigits, setPhoneDigits] = useState('5552345678');
+  const [selectedCountry, setSelectedCountry] = useState('+91');
+  const [phoneDigits, setPhoneDigits] = useState('9845012345');
   const [generatedOtp, setGeneratedOtp] = useState<string>('');
   const [enteredOtp, setEnteredOtp] = useState<string>('');
   const [showSmsBanner, setShowSmsBanner] = useState(false);
@@ -52,7 +51,6 @@ export const PhoneAuthModal: React.FC<PhoneAuthModalProps> = ({ onLoginSuccess }
     setCountdown(30);
     setStep('otp');
 
-    // Trigger simulated SMS push notification after a brief realistic network latency (600ms)
     setTimeout(() => {
       setShowSmsBanner(true);
     }, 600);
@@ -61,13 +59,11 @@ export const PhoneAuthModal: React.FC<PhoneAuthModalProps> = ({ onLoginSuccess }
   const handleVerifyOtp = (codeToVerify?: string) => {
     const code = codeToVerify || enteredOtp;
     if (code === generatedOtp || code === '123456') {
-      // Valid! Check if user exists in local DB
       const existing = BibleRealDB.getUser();
       const fullPhone = `${selectedCountry}${phoneDigits}`;
       if (existing && existing.phoneNumber === fullPhone) {
         onLoginSuccess(existing);
       } else {
-        // Proceed to profile setup
         setStep('profile');
       }
     } else {
@@ -116,41 +112,41 @@ export const PhoneAuthModal: React.FC<PhoneAuthModalProps> = ({ onLoginSuccess }
       )}
 
       {/* Brand Header */}
-      <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+      <div style={{ textAlign: 'center', marginBottom: '28px' }}>
         <div
           style={{
             width: '68px',
             height: '68px',
-            borderRadius: '22px',
-            background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(16, 185, 129, 0.2))',
+            borderRadius: '24px',
+            background: 'linear-gradient(135deg, rgba(194, 94, 48, 0.18), rgba(67, 122, 92, 0.15))',
             border: '1px solid var(--border-accent)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             margin: '0 auto 16px',
             color: 'var(--accent-gold)',
-            boxShadow: '0 8px 24px rgba(245, 158, 11, 0.25)'
+            boxShadow: '0 8px 24px rgba(194, 94, 48, 0.15)'
           }}
         >
           <BookOpen size={34} strokeWidth={2.2} />
         </div>
         <h1
           className="text-gold-gradient"
-          style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 800, letterSpacing: '-0.5px' }}
+          style={{ fontFamily: 'var(--font-display)', fontSize: '27px', fontWeight: 800, letterSpacing: '-0.4px' }}
         >
-          BibleReal
+          Bangalore BibleClub
         </h1>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginTop: '6px' }}>
-          Capture & share your daily Bible reading journey
+        <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginTop: '6px', fontWeight: 600 }}>
+          Your cozy daily space to read, reflect & share Scripture
         </p>
       </div>
 
       {step === 'phone' ? (
         <form onSubmit={handleSendCode} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-          <div className="glass-panel" style={{ padding: '20px' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '10px' }}>
+          <div className="glass-panel" style={{ padding: '22px' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '10px' }}>
               <Phone size={14} color="var(--accent-gold)" />
-              <span>Enter Phone Number</span>
+              <span>Enter Mobile Number</span>
             </label>
 
             <div style={{ display: 'flex', gap: '8px' }}>
@@ -160,17 +156,18 @@ export const PhoneAuthModal: React.FC<PhoneAuthModalProps> = ({ onLoginSuccess }
                 style={{
                   padding: '12px 10px',
                   borderRadius: '12px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                  backgroundColor: '#FFFFFF',
                   border: '1px solid var(--border-subtle)',
-                  color: '#F8FAFC',
+                  color: 'var(--text-primary)',
                   fontSize: '15px',
-                  fontWeight: 600,
+                  fontWeight: 700,
                   outline: 'none',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  fontFamily: 'var(--font-main)'
                 }}
               >
                 {COUNTRY_CODES.map((c) => (
-                  <option key={c.code} value={c.code} style={{ background: '#111827', color: '#fff' }}>
+                  <option key={c.code} value={c.code} style={{ background: '#FFFBF5', color: '#2C2520' }}>
                     {c.flag} {c.code}
                   </option>
                 ))}
@@ -181,25 +178,26 @@ export const PhoneAuthModal: React.FC<PhoneAuthModalProps> = ({ onLoginSuccess }
                 required
                 value={phoneDigits}
                 onChange={(e) => setPhoneDigits(e.target.value.replace(/\D/g, ''))}
-                placeholder="555 123 4567"
+                placeholder="98450 12345"
                 style={{
                   flex: 1,
                   padding: '12px 16px',
                   borderRadius: '12px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                  backgroundColor: '#FFFFFF',
                   border: '1px solid var(--border-subtle)',
-                  color: '#F8FAFC',
+                  color: 'var(--text-primary)',
                   fontSize: '16px',
-                  fontWeight: 600,
+                  fontWeight: 700,
                   letterSpacing: '0.5px',
-                  outline: 'none'
+                  outline: 'none',
+                  fontFamily: 'var(--font-main)'
                 }}
               />
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '12px', fontSize: '12px', color: 'var(--text-muted)' }}>
               <ShieldCheck size={13} color="var(--accent-emerald)" />
-              <span>We'll send an interactive 6-digit confirmation code.</span>
+              <span>We'll send a 6-digit confirmation code via simulated SMS.</span>
             </div>
           </div>
 
@@ -215,11 +213,11 @@ export const PhoneAuthModal: React.FC<PhoneAuthModalProps> = ({ onLoginSuccess }
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <div style={{ textAlign: 'center', marginBottom: '8px' }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#F8FAFC' }}>
+            <h3 style={{ fontSize: '19px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>
               Confirm your code
             </h3>
             <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginTop: '4px' }}>
-              Sent to <strong style={{ color: '#fff' }}>{selectedCountry} {phoneDigits}</strong>
+              Sent to <strong style={{ color: 'var(--text-primary)' }}>{selectedCountry} {phoneDigits}</strong>
             </p>
           </div>
 
@@ -235,8 +233,8 @@ export const PhoneAuthModal: React.FC<PhoneAuthModalProps> = ({ onLoginSuccess }
           />
 
           {otpError && (
-            <div style={{ color: 'var(--accent-rose)', fontSize: '13px', fontWeight: 600, marginBottom: '12px' }}>
-              Incorrect code. Please check SMS or tap Autofill.
+            <div style={{ color: 'var(--accent-rose)', fontSize: '13px', fontWeight: 700, marginBottom: '12px' }}>
+              Incorrect code. Please check SMS banner or tap Autofill.
             </div>
           )}
 
@@ -258,10 +256,11 @@ export const PhoneAuthModal: React.FC<PhoneAuthModalProps> = ({ onLoginSuccess }
                 border: 'none',
                 color: 'var(--text-secondary)',
                 fontSize: '13px',
+                fontWeight: 600,
                 cursor: 'pointer'
               }}
             >
-              Change Phone Number
+              Change Mobile Number
             </button>
 
             <button
@@ -272,15 +271,16 @@ export const PhoneAuthModal: React.FC<PhoneAuthModalProps> = ({ onLoginSuccess }
                 border: 'none',
                 color: countdown > 0 ? 'var(--text-muted)' : 'var(--accent-gold)',
                 fontSize: '13px',
-                fontWeight: 600,
+                fontWeight: 700,
                 cursor: countdown > 0 ? 'default' : 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '4px'
+                gap: '4px',
+                fontFamily: 'var(--font-display)'
               }}
             >
               <RefreshCw size={12} />
-              {countdown > 0 ? `Resend code (${countdown}s)` : 'Resend Code'}
+              {countdown > 0 ? `Resend (${countdown}s)` : 'Resend Code'}
             </button>
           </div>
         </div>

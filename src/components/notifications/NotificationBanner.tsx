@@ -32,12 +32,12 @@ export const NotificationBanner: React.FC<NotificationBannerProps> = ({
         left: '12px',
         right: '12px',
         zIndex: 500,
-        backgroundColor: 'rgba(16, 23, 38, 0.95)',
+        backgroundColor: 'rgba(255, 255, 255, 0.98)',
         backdropFilter: 'blur(20px)',
-        border: '1px solid rgba(245, 158, 11, 0.4)',
-        borderRadius: '18px',
-        padding: '12px 14px',
-        boxShadow: '0 12px 32px rgba(0, 0, 0, 0.7), 0 0 20px rgba(245, 158, 11, 0.25)',
+        border: '1px solid rgba(194, 94, 48, 0.35)',
+        borderRadius: '20px',
+        padding: '12px 16px',
+        boxShadow: '0 12px 32px rgba(60, 45, 30, 0.15), 0 0 20px rgba(194, 94, 48, 0.1)',
         animation: 'slideDownToast 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
         cursor: 'pointer',
         display: 'flex',
@@ -56,14 +56,14 @@ export const NotificationBanner: React.FC<NotificationBannerProps> = ({
             position: 'absolute',
             bottom: '-2px',
             right: '-2px',
-            backgroundColor: '#10B981',
+            backgroundColor: 'var(--accent-emerald)',
             borderRadius: '50%',
             width: '16px',
             height: '16px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: '#000'
+            color: '#fff'
           }}
         >
           <BookOpen size={9} strokeWidth={3} />
@@ -73,11 +73,11 @@ export const NotificationBanner: React.FC<NotificationBannerProps> = ({
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--accent-gold)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-            GROUP ALERT
+            BANGALORE BIBLECLUB ALERT
           </span>
           <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>• Just now</span>
         </div>
-        <div style={{ fontSize: '13px', fontWeight: 700, color: '#F8FAFC', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+        <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
           {notification.message}
         </div>
       </div>

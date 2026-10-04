@@ -23,7 +23,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
         left: 0,
         right: 0,
         height: '70px',
-        backgroundColor: 'rgba(8, 12, 21, 0.95)',
+        backgroundColor: 'rgba(247, 244, 236, 0.96)',
         backdropFilter: 'blur(20px)',
         borderTop: '1px solid var(--border-subtle)',
         display: 'flex',
@@ -42,14 +42,15 @@ export const BottomNav: React.FC<BottomNavProps> = ({
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '4px',
+          gap: '3px',
           color: activeTab === 'feed' ? 'var(--accent-gold)' : 'var(--text-muted)',
           cursor: 'pointer',
-          padding: '6px'
+          padding: '6px',
+          fontFamily: 'var(--font-display)'
         }}
       >
         <Home size={20} />
-        <span style={{ fontSize: '10px', fontWeight: activeTab === 'feed' ? 700 : 500 }}>Circle</span>
+        <span style={{ fontSize: '11px', fontWeight: activeTab === 'feed' ? 800 : 600 }}>Circle</span>
       </button>
 
       {/* Progress Tab */}
@@ -61,17 +62,18 @@ export const BottomNav: React.FC<BottomNavProps> = ({
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '4px',
+          gap: '3px',
           color: activeTab === 'progress' ? 'var(--accent-gold)' : 'var(--text-muted)',
           cursor: 'pointer',
-          padding: '6px'
+          padding: '6px',
+          fontFamily: 'var(--font-display)'
         }}
       >
         <BarChart2 size={20} />
-        <span style={{ fontSize: '10px', fontWeight: activeTab === 'progress' ? 700 : 500 }}>Tracker</span>
+        <span style={{ fontSize: '11px', fontWeight: activeTab === 'progress' ? 800 : 600 }}>Tracker</span>
       </button>
 
-      {/* Primary Center Capture Button */}
+      {/* Primary Center Capture Button - Warm Terracotta */}
       <button
         onClick={onOpenCapture}
         style={{
@@ -80,20 +82,20 @@ export const BottomNav: React.FC<BottomNavProps> = ({
           width: '54px',
           height: '54px',
           borderRadius: '50%',
-          background: 'linear-gradient(135deg, #FCD34D 0%, #F59E0B 50%, #D97706 100%)',
-          border: '3px solid #080C15',
+          background: 'linear-gradient(135deg, #C25E30 0%, #A84920 100%)',
+          border: '3px solid #F7F4EC',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: '#080C15',
-          boxShadow: '0 8px 24px rgba(245, 158, 11, 0.45)',
+          color: '#FFFFFF',
+          boxShadow: '0 8px 24px rgba(194, 94, 48, 0.35)',
           cursor: 'pointer',
           transform: 'scale(1)',
           transition: 'all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)'
         }}
-        title="Snap Bible Reading (BeReal 2 photos)"
+        title="Snap Bible Reading (2 photos)"
       >
-        <Camera size={24} strokeWidth={2.5} />
+        <Camera size={24} strokeWidth={2.4} />
       </button>
 
       {/* Notifications Tab */}
@@ -106,10 +108,11 @@ export const BottomNav: React.FC<BottomNavProps> = ({
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '4px',
+          gap: '3px',
           color: activeTab === 'notifications' ? 'var(--accent-gold)' : 'var(--text-muted)',
           cursor: 'pointer',
-          padding: '6px'
+          padding: '6px',
+          fontFamily: 'var(--font-display)'
         }}
       >
         <Bell size={20} />
@@ -126,7 +129,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
             }}
           />
         )}
-        <span style={{ fontSize: '10px', fontWeight: activeTab === 'notifications' ? 700 : 500 }}>Alerts</span>
+        <span style={{ fontSize: '11px', fontWeight: activeTab === 'notifications' ? 800 : 600 }}>Alerts</span>
       </button>
 
       {/* Profile Tab */}
@@ -138,14 +141,15 @@ export const BottomNav: React.FC<BottomNavProps> = ({
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '4px',
+          gap: '3px',
           color: activeTab === 'profile' ? 'var(--accent-gold)' : 'var(--text-muted)',
           cursor: 'pointer',
-          padding: '6px'
+          padding: '6px',
+          fontFamily: 'var(--font-display)'
         }}
       >
         <User size={20} />
-        <span style={{ fontSize: '10px', fontWeight: activeTab === 'profile' ? 700 : 500 }}>Profile</span>
+        <span style={{ fontSize: '11px', fontWeight: activeTab === 'profile' ? 800 : 600 }}>Profile</span>
       </button>
     </nav>
   );

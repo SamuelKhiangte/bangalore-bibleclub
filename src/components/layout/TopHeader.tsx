@@ -20,13 +20,13 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
   return (
     <header
       style={{
-        height: '56px',
+        height: '58px',
         padding: '0 16px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         borderBottom: '1px solid var(--border-subtle)',
-        backgroundColor: 'rgba(8, 12, 21, 0.85)',
+        backgroundColor: 'rgba(247, 244, 236, 0.92)',
         backdropFilter: 'blur(16px)',
         position: 'sticky',
         top: 0,
@@ -40,10 +40,10 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
       >
         <div
           style={{
-            width: '30px',
-            height: '30px',
-            borderRadius: '8px',
-            backgroundColor: 'rgba(245, 158, 11, 0.15)',
+            width: '32px',
+            height: '32px',
+            borderRadius: '10px',
+            backgroundColor: 'rgba(194, 94, 48, 0.12)',
             border: '1px solid var(--border-accent)',
             display: 'flex',
             alignItems: 'center',
@@ -53,17 +53,23 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
         >
           <BookOpen size={16} />
         </div>
-        <span
-          className="text-gold-gradient"
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: '18px',
-            fontWeight: 800,
-            letterSpacing: '-0.3px'
-          }}
-        >
-          BibleReal
-        </span>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <span
+            className="text-gold-gradient"
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '17px',
+              fontWeight: 800,
+              letterSpacing: '-0.3px',
+              lineHeight: 1.1
+            }}
+          >
+            Bangalore BibleClub
+          </span>
+          <span style={{ fontSize: '9px', fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.4px' }}>
+            DAILY READING CIRCLE
+          </span>
+        </div>
       </div>
 
       {/* Right Action Icons */}
@@ -73,17 +79,18 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
           onClick={onSimulateReading}
           title="Simulate friend reading (triggers group notification)"
           style={{
-            background: 'rgba(245, 158, 11, 0.12)',
+            background: 'rgba(194, 94, 48, 0.1)',
             border: '1px solid var(--border-accent)',
             borderRadius: '9999px',
-            padding: '4px 8px',
+            padding: '4px 9px',
             display: 'flex',
             alignItems: 'center',
             gap: '4px',
             color: 'var(--accent-gold)',
             fontSize: '11px',
             fontWeight: 700,
-            cursor: 'pointer'
+            cursor: 'pointer',
+            fontFamily: 'var(--font-display)'
           }}
         >
           <Sparkles size={12} />
@@ -97,7 +104,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
             display: 'flex',
             alignItems: 'center',
             gap: '4px',
-            backgroundColor: 'rgba(245, 158, 11, 0.15)',
+            backgroundColor: 'rgba(194, 94, 48, 0.1)',
             border: '1px solid var(--border-accent)',
             padding: '4px 9px',
             borderRadius: '9999px',
@@ -105,7 +112,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
           }}
         >
           <Flame size={14} color="var(--accent-gold)" fill="var(--accent-gold)" />
-          <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--accent-gold)' }}>
+          <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--accent-gold)', fontFamily: 'var(--font-display)' }}>
             {currentUser.streakDays}
           </span>
         </div>
@@ -115,7 +122,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
           onClick={() => onTabChange('notifications')}
           style={{
             position: 'relative',
-            background: activeTab === 'notifications' ? 'rgba(255, 255, 255, 0.12)' : 'rgba(255, 255, 255, 0.05)',
+            background: activeTab === 'notifications' ? 'rgba(194, 94, 48, 0.15)' : 'rgba(255, 255, 255, 0.9)',
             border: '1px solid var(--border-subtle)',
             borderRadius: '50%',
             width: '34px',
@@ -135,7 +142,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
                 top: '-2px',
                 right: '-2px',
                 backgroundColor: 'var(--accent-gold)',
-                color: '#000',
+                color: '#fff',
                 borderRadius: '50%',
                 width: '15px',
                 height: '15px',
@@ -143,8 +150,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
                 fontWeight: 900,
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 0 8px var(--accent-gold)'
+                justifyContent: 'center'
               }}
             >
               {unreadCount}

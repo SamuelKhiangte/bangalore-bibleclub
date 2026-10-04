@@ -20,12 +20,12 @@ export const SimulatedSmsBanner: React.FC<SimulatedSmsBannerProps> = ({
         left: '12px',
         right: '12px',
         zIndex: 200,
-        backgroundColor: 'rgba(26, 36, 56, 0.95)',
+        backgroundColor: 'rgba(255, 255, 255, 0.96)',
         backdropFilter: 'blur(20px)',
-        border: '1px solid rgba(245, 158, 11, 0.4)',
-        borderRadius: '18px',
-        padding: '12px 14px',
-        boxShadow: '0 12px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(245, 158, 11, 0.25)',
+        border: '1px solid rgba(194, 94, 48, 0.35)',
+        borderRadius: '20px',
+        padding: '12px 16px',
+        boxShadow: '0 12px 30px rgba(60, 45, 30, 0.12), 0 0 20px rgba(194, 94, 48, 0.1)',
         animation: 'slideDownToast 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
         cursor: 'pointer'
       }}
@@ -38,7 +38,7 @@ export const SimulatedSmsBanner: React.FC<SimulatedSmsBannerProps> = ({
               width: '22px',
               height: '22px',
               borderRadius: '6px',
-              backgroundColor: '#10B981',
+              backgroundColor: 'var(--accent-emerald)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -47,7 +47,7 @@ export const SimulatedSmsBanner: React.FC<SimulatedSmsBannerProps> = ({
           >
             <MessageSquare size={13} />
           </div>
-          <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+          <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
             MESSAGES • NOW
           </span>
         </div>
@@ -71,11 +71,11 @@ export const SimulatedSmsBanner: React.FC<SimulatedSmsBannerProps> = ({
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
         <div>
-          <div style={{ fontSize: '13px', fontWeight: 600, color: '#F8FAFC' }}>
-            BibleReal Verification
+          <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>
+            Bangalore BibleClub
           </div>
-          <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
-            Your 6-digit code is <strong style={{ color: 'var(--accent-gold)', letterSpacing: '1.5px', fontSize: '14px' }}>{code}</strong>
+          <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '1px' }}>
+            Your 6-digit code is <strong style={{ color: 'var(--accent-gold)', letterSpacing: '1px', fontSize: '14px' }}>{code}</strong>
           </div>
         </div>
 

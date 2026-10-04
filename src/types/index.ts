@@ -37,16 +37,42 @@ export interface ReadingPost {
   }>;
 }
 
+export interface QuestionAnswer {
+  id: string;
+  userId: string;
+  userName: string;
+  userAvatar: string;
+  text: string;
+  createdAt: string;
+  upvotes: string[]; // userIds
+  isBestAnswer?: boolean;
+}
+
+export interface VerseQuestion {
+  id: string;
+  userId: string;
+  userName: string;
+  userAvatar: string;
+  verseReference: string; // e.g. "John 15:5"
+  bookId: string;
+  questionText: string;
+  contextNote?: string;
+  createdAt: string;
+  upvotes: string[]; // userIds
+  answers: QuestionAnswer[];
+}
+
 export interface GroupNotification {
   id: string;
-  type: 'reading_completed' | 'reaction' | 'comment';
+  type: 'reading_completed' | 'reaction' | 'comment' | 'question_answered';
   actorName: string;
   actorAvatar: string;
   title: string;
   message: string;
   postId?: string;
+  questionId?: string;
   timestamp: string;
   read: boolean;
 }
 
-export type ActiveTab = 'feed' | 'read' | 'progress' | 'notifications' | 'profile';
+export type ActiveTab = 'feed' | 'read' | 'progress' | 'notifications' | 'profile' | 'qa';

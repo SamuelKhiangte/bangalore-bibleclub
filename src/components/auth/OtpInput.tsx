@@ -16,7 +16,6 @@ export const OtpInput: React.FC<OtpInputProps> = ({
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => {
-    // Focus first input on mount
     inputRefs.current[0]?.focus();
   }, []);
 
@@ -73,20 +72,20 @@ export const OtpInput: React.FC<OtpInputProps> = ({
             style={{
               width: '46px',
               height: '56px',
-              borderRadius: '12px',
-              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              borderRadius: '14px',
+              backgroundColor: '#FFFFFF',
               border: hasError
                 ? '2px solid var(--accent-rose)'
                 : char
                 ? '2px solid var(--accent-gold)'
                 : '1px solid var(--border-subtle)',
-              color: '#F8FAFC',
+              color: 'var(--text-primary)',
               fontSize: '22px',
-              fontWeight: 700,
+              fontWeight: 800,
               fontFamily: 'var(--font-display)',
               textAlign: 'center',
               outline: 'none',
-              boxShadow: char ? '0 0 14px rgba(245, 158, 11, 0.25)' : 'none',
+              boxShadow: char ? '0 0 12px var(--accent-gold-glow)' : '0 2px 6px rgba(60,45,30,0.04)',
               transition: 'all 0.15s ease'
             }}
           />

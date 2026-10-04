@@ -9,8 +9,8 @@ describe('Auth Flow', () => {
     const onLogin = vi.fn();
     render(React.createElement(PhoneAuthModal, { onLoginSuccess: onLogin }));
 
-    expect(screen.getByText('BibleReal')).toBeDefined();
-    expect(screen.getByPlaceholderText('555 123 4567')).toBeDefined();
+    expect(screen.getByText('Bangalore BibleClub')).toBeDefined();
+    expect(screen.getByPlaceholderText('98450 12345')).toBeDefined();
     expect(screen.getByText('Send Verification Code')).toBeDefined();
   });
 

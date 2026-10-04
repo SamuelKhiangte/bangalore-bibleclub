@@ -21,7 +21,6 @@ export const CreateReadingModal: React.FC<CreateReadingModalProps> = ({
   onClose,
   onPostCreated
 }) => {
-  // Phase: 'camera' | 'details'
   const [phase, setPhase] = useState<'camera' | 'details'>('camera');
   const [startPhoto, setStartPhoto] = useState<string | null>(null);
   const [endPhoto, setEndPhoto] = useState<string | null>(null);
@@ -70,18 +69,14 @@ export const CreateReadingModal: React.FC<CreateReadingModalProps> = ({
       reflection: reflection.trim() || undefined,
       createdAt: new Date().toISOString(),
       reactions: {
-        '🙏': [user.id] // user amens their own reading habit
+        '🙏': [user.id]
       },
       comments: []
     };
 
-    // 1. Add post to storage
     BibleRealDB.addPost(newPost);
-
-    // 2. Record chapters read in Bible progress tracker & update streak
     BibleRealDB.recordChaptersRead(passage.bookId, passage.startChapter, passage.endChapter);
 
-    // 3. Dispatch group notification to friends circle
     const verseRef = `${passage.bookName} ${passage.startChapter}:${passage.startVerse}–${
       passage.startChapter === passage.endChapter ? '' : `${passage.endChapter}:`
     }${passage.endVerse}`;
@@ -95,24 +90,22 @@ export const CreateReadingModal: React.FC<CreateReadingModalProps> = ({
       postId: newPost.id
     });
 
-    // 4. Play chime & trigger celebration confetti
     playNotificationChime();
     try {
       confetti({
         particleCount: 80,
         spread: 60,
         origin: { y: 0.6 },
-        colors: ['#F59E0B', '#10B981', '#38BDF8', '#FCD34D']
+        colors: ['#C25E30', '#437A5C', '#E08256', '#D97706']
       });
     } catch {
-      // Ignored if canvas-confetti unsupported
+      // Ignored if confetti unsupported
     }
 
     setIsSubmitting(false);
     onPostCreated(newPost);
     onClose();
 
-    // Reset phase
     setPhase('camera');
     setStartPhoto(null);
     setEndPhoto(null);
@@ -146,7 +139,7 @@ export const CreateReadingModal: React.FC<CreateReadingModalProps> = ({
               justifyContent: 'space-between',
               padding: '16px 20px',
               borderBottom: '1px solid var(--border-subtle)',
-              backgroundColor: 'rgba(16, 23, 38, 0.8)',
+              backgroundColor: 'rgba(247, 244, 236, 0.95)',
               backdropFilter: 'blur(12px)'
             }}
           >
@@ -161,14 +154,15 @@ export const CreateReadingModal: React.FC<CreateReadingModalProps> = ({
                 gap: '6px',
                 cursor: 'pointer',
                 fontSize: '14px',
-                fontWeight: 600
+                fontWeight: 700,
+                fontFamily: 'var(--font-display)'
               }}
             >
               <ArrowLeft size={16} />
               <span>Back</span>
             </button>
 
-            <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '16px', color: '#F8FAFC' }}>
+            <span style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '17px', color: 'var(--text-primary)' }}>
               Reading Details
             </span>
 
@@ -177,7 +171,6 @@ export const CreateReadingModal: React.FC<CreateReadingModalProps> = ({
 
           {/* Form Scroll Content */}
           <div style={{ flex: 1, overflowY: 'auto', padding: '20px' }}>
-            {/* BeReal Tap-to-Swap Dual Preview Thumbnail */}
             {startPhoto && endPhoto && (
               <div style={{ width: '220px', margin: '0 auto 20px' }}>
                 <BeRealCardPreview
@@ -197,7 +190,7 @@ export const CreateReadingModal: React.FC<CreateReadingModalProps> = ({
 
             {/* Reflection Note */}
             <div style={{ marginTop: '18px' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '8px' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '8px' }}>
                 <MessageSquare size={14} color="var(--accent-emerald)" />
                 <span>Reflection / What spoke to you?</span>
                 <span style={{ marginLeft: 'auto', fontSize: '11px', color: 'var(--text-muted)' }}>(Optional)</span>
@@ -210,15 +203,15 @@ export const CreateReadingModal: React.FC<CreateReadingModalProps> = ({
                 style={{
                   width: '100%',
                   padding: '12px 14px',
-                  borderRadius: '12px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                  borderRadius: '14px',
+                  backgroundColor: '#FFFFFF',
                   border: '1px solid var(--border-subtle)',
-                  color: '#fff',
+                  color: 'var(--text-primary)',
                   fontSize: '14px',
-                  lineHeight: '1.4',
+                  lineHeight: '1.45',
                   resize: 'none',
                   outline: 'none',
-                  fontFamily: 'inherit'
+                  fontFamily: 'var(--font-main)'
                 }}
               />
             </div>
@@ -229,7 +222,7 @@ export const CreateReadingModal: React.FC<CreateReadingModalProps> = ({
             style={{
               padding: '16px 20px',
               borderTop: '1px solid var(--border-subtle)',
-              backgroundColor: 'rgba(16, 23, 38, 0.95)'
+              backgroundColor: 'rgba(247, 244, 236, 0.98)'
             }}
           >
             <button
@@ -239,7 +232,7 @@ export const CreateReadingModal: React.FC<CreateReadingModalProps> = ({
               style={{ width: '100%', padding: '14px', fontSize: '15px' }}
             >
               <Send size={18} />
-              <span>Post to Friends Circle & Notify Group</span>
+              <span>Post to Bangalore BibleClub</span>
             </button>
           </div>
         </div>

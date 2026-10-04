@@ -1,4 +1,4 @@
-import type { UserProfile, ReadingPost, GroupNotification } from '../types/index.ts';
+import type { UserProfile, ReadingPost, GroupNotification, VerseQuestion, QuestionAnswer } from '../types/index.ts';
 import {
   SAMPLE_START_PHOTO,
   SAMPLE_END_PHOTO,
@@ -6,10 +6,11 @@ import {
   SAMPLE_JOHN_END
 } from '../data/sampleBiblePhotos.ts';
 
-const USER_KEY = 'biblereal_user';
-const PROGRESS_KEY = 'biblereal_completed_chapters';
-const POSTS_KEY = 'biblereal_posts';
-const NOTIFICATIONS_KEY = 'biblereal_notifications';
+const USER_KEY = 'bangalore_bibleclub_user';
+const PROGRESS_KEY = 'bangalore_bibleclub_completed_chapters';
+const POSTS_KEY = 'bangalore_bibleclub_posts';
+const NOTIFICATIONS_KEY = 'bangalore_bibleclub_notifications';
+const QUESTIONS_KEY = 'bangalore_bibleclub_questions';
 
 export const DEFAULT_FRIEND_POSTS: ReadingPost[] = [
   {
@@ -92,6 +93,55 @@ export const DEFAULT_NOTIFICATIONS: GroupNotification[] = [
     postId: 'post-david-1',
     timestamp: new Date(Date.now() - 1000 * 60 * 180).toISOString(),
     read: true
+  }
+];
+
+export const DEFAULT_QUESTIONS: VerseQuestion[] = [
+  {
+    id: 'q-1',
+    userId: 'user-sarah',
+    userName: 'Sarah Jenkins',
+    userAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
+    verseReference: 'John 15:5',
+    bookId: 'john',
+    questionText: "What does Jesus mean by 'apart from Me you can do nothing'? How does this work in our daily Bangalore work/study routine?",
+    contextNote: 'Reading chapter 15 this morning on the True Vine.',
+    createdAt: new Date(Date.now() - 1000 * 60 * 120).toISOString(),
+    upvotes: ['user-david', 'user-michael'],
+    answers: [
+      {
+        id: 'ans-1',
+        userId: 'user-david',
+        userName: 'David Miller',
+        userAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
+        text: 'It means spiritual fruit and lasting peace only come when we remain connected to Him through prayer and humility, just like branches drawing sap from the vine.',
+        createdAt: new Date(Date.now() - 1000 * 60 * 90).toISOString(),
+        upvotes: ['user-sarah'],
+        isBestAnswer: true
+      }
+    ]
+  },
+  {
+    id: 'q-2',
+    userId: 'user-michael',
+    userName: 'Michael Chang',
+    userAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
+    verseReference: 'Romans 8:28',
+    bookId: 'romans',
+    questionText: 'When friends go through heartbreak or layoffs, how should we share Romans 8:28 without sounding insensitive?',
+    createdAt: new Date(Date.now() - 1000 * 60 * 300).toISOString(),
+    upvotes: ['user-david'],
+    answers: [
+      {
+        id: 'ans-2',
+        userId: 'user-sarah',
+        userName: 'Sarah Jenkins',
+        userAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
+        text: 'Paul wrote this from imprisonment and hardship. We should weep with those who weep first, and gently remind them that God will redeem their pain, rather than dismissing their grief.',
+        createdAt: new Date(Date.now() - 1000 * 60 * 240).toISOString(),
+        upvotes: ['user-michael', 'user-david']
+      }
+    ]
   }
 ];
 
@@ -280,6 +330,94 @@ class StorageService {
   getUnreadNotificationsCount(): number {
     return this.getNotifications().filter((n) => !n.read).length;
   }
+
+  // --- Verse Questions & Answers ---
+  getQuestions(): VerseQuestion[] {
+    const raw = localStorage.getItem(QUESTIONS_KEY);
+    if (!raw) {
+      localStorage.setItem(QUESTIONS_KEY, JSON.stringify(DEFAULT_QUESTIONS));
+      return DEFAULT_QUESTIONS;
+    }
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return DEFAULT_QUESTIONS;
+    }
+  }
+
+  addQuestion(question: Omit<VerseQuestion, 'id' | 'createdAt' | 'upvotes' | 'answers'>): VerseQuestion {
+    const all = this.getQuestions();
+    const created: VerseQuestion = {
+      ...question,
+      id: `q-${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      upvotes: [],
+      answers: []
+    };
+    const updated = [created, ...all];
+    localStorage.setItem(QUESTIONS_KEY, JSON.stringify(updated));
+    this.notify();
+    return created;
+  }
+
+  addAnswer(questionId: string, answer: { userId: string; userName: string; userAvatar: string; text: string }): void {
+    const all = this.getQuestions();
+    const q = all.find((item) => item.id === questionId);
+    if (!q) return;
+
+    const newAns: QuestionAnswer = {
+      ...answer,
+      id: `ans-${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      upvotes: []
+    };
+    q.answers.push(newAns);
+    localStorage.setItem(QUESTIONS_KEY, JSON.stringify(all));
+
+    // Also add notification for question author
+    this.addNotification({
+      type: 'question_answered',
+      actorName: answer.userName,
+      actorAvatar: answer.userAvatar,
+      title: 'Question Answered',
+      message: `${answer.userName} replied to your question on ${q.verseReference}`,
+      questionId
+    });
+
+    this.notify();
+  }
+
+  toggleQuestionUpvote(questionId: string, userId: string): void {
+    const all = this.getQuestions();
+    const q = all.find((item) => item.id === questionId);
+    if (!q) return;
+
+    if (q.upvotes.includes(userId)) {
+      q.upvotes = q.upvotes.filter((u) => u !== userId);
+    } else {
+      q.upvotes.push(userId);
+    }
+    localStorage.setItem(QUESTIONS_KEY, JSON.stringify(all));
+    this.notify();
+  }
+
+  toggleAnswerUpvote(questionId: string, answerId: string, userId: string): void {
+    const all = this.getQuestions();
+    const q = all.find((item) => item.id === questionId);
+    if (!q) return;
+
+    const ans = q.answers.find((a) => a.id === answerId);
+    if (!ans) return;
+
+    if (ans.upvotes.includes(userId)) {
+      ans.upvotes = ans.upvotes.filter((u) => u !== userId);
+    } else {
+      ans.upvotes.push(userId);
+    }
+    localStorage.setItem(QUESTIONS_KEY, JSON.stringify(all));
+    this.notify();
+  }
 }
 
 export const BibleRealDB = new StorageService();
+
