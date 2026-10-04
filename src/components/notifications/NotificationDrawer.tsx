@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Bell, BookOpen, CheckCheck, Sparkles, MessageCircle, Heart } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Bell, BookOpen, CheckCheck, Sparkles } from 'lucide-react';
 import { BibleRealDB } from '../../services/storage.ts';
 import type { GroupNotification } from '../../types/index.ts';
 

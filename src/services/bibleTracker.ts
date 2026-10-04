@@ -3,8 +3,7 @@ import {
   TOTAL_BIBLE_CHAPTERS,
   TOTAL_OT_CHAPTERS,
   TOTAL_NT_CHAPTERS,
-  getBookById,
-  type BibleBook
+  getBookById
 } from '../data/bibleCanon.ts';
 
 export interface BibleProgressStats {

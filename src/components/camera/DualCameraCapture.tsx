@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Camera, SwitchCamera, Upload, Sparkles, Check, RotateCcw, X, AlertCircle } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Camera, SwitchCamera, Upload, Sparkles, Check, RotateCcw, X } from 'lucide-react';
 import { BeRealCardPreview } from './BeRealCardPreview.tsx';
 import { SAMPLE_START_PHOTO, SAMPLE_END_PHOTO } from '../../data/sampleBiblePhotos.ts';
 import { playShutterSound } from '../../services/sound.ts';

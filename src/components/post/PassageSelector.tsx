@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Book, Clock } from 'lucide-react';
 import { BIBLE_BOOKS, getBookById } from '../../data/bibleCanon.ts';
 
@@ -19,14 +19,7 @@ interface PassageSelectorProps {
 }
 
 export const PassageSelector: React.FC<PassageSelectorProps> = ({ value, onChange }) => {
-  const [searchQuery, setSearchQuery] = useState('');
-
   const currentBook = getBookById(value.bookId) || BIBLE_BOOKS[0];
-
-  const filteredBooks = BIBLE_BOOKS.filter((b) =>
-    b.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    b.abbreviation.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   const handleBookChange = (bookId: string) => {
     const book = getBookById(bookId);

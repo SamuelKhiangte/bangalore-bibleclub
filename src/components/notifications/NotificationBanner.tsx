@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Bell, BookOpen, X } from 'lucide-react';
+import { useEffect } from 'react';
+import { BookOpen, X } from 'lucide-react';
 import type { GroupNotification } from '../../types/index.ts';
 
 interface NotificationBannerProps {

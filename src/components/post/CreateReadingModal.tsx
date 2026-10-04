@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import confetti from 'canvas-confetti';
-import { Sparkles, ArrowLeft, Send, MessageSquare } from 'lucide-react';
+import { ArrowLeft, Send, MessageSquare } from 'lucide-react';
 import { DualCameraCapture } from '../camera/DualCameraCapture.tsx';
 import { BeRealCardPreview } from '../camera/BeRealCardPreview.tsx';
 import { PassageSelector, type PassageSelection } from './PassageSelector.tsx';

@@ -12,7 +12,6 @@ interface CommentsDrawerProps {
 
 export const CommentsDrawer: React.FC<CommentsDrawerProps> = ({
   post,
-  currentUser,
   isOpen,
   onClose,
   onAddComment

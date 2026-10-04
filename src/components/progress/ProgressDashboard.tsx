@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Flame, Trophy, Calendar, Sparkles } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Flame, Trophy } from 'lucide-react';
 import { CircularProgress } from './CircularProgress.tsx';
 import { BookChapterMatrix } from './BookChapterMatrix.tsx';
 import { BibleRealDB } from '../../services/storage.ts';
