@@ -168,14 +168,14 @@ export const FeedView: React.FC<FeedViewProps> = ({ currentUser, onOpenCreatePos
           style={{
             padding: '16px 18px',
             marginBottom: '20px',
-            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(247, 244, 236, 0.95) 100%)',
+            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(243, 246, 243, 0.95) 100%)',
             border: '1px solid var(--border-accent)',
             borderRadius: '20px',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            boxShadow: '0 8px 24px rgba(194, 94, 48, 0.1)'
+            boxShadow: '0 8px 24px rgba(74, 124, 89, 0.1)'
           }}
         >
           <div>

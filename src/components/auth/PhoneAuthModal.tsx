@@ -118,14 +118,14 @@ export const PhoneAuthModal: React.FC<PhoneAuthModalProps> = ({ onLoginSuccess }
             width: '68px',
             height: '68px',
             borderRadius: '24px',
-            background: 'linear-gradient(135deg, rgba(194, 94, 48, 0.18), rgba(67, 122, 92, 0.15))',
+            background: 'linear-gradient(135deg, rgba(74, 124, 89, 0.2), rgba(49, 89, 61, 0.12))',
             border: '1px solid var(--border-accent)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             margin: '0 auto 16px',
             color: 'var(--accent-gold)',
-            boxShadow: '0 8px 24px rgba(194, 94, 48, 0.15)'
+            boxShadow: '0 8px 24px rgba(74, 124, 89, 0.18)'
           }}
         >
           <BookOpen size={34} strokeWidth={2.2} />

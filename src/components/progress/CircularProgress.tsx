@@ -24,9 +24,9 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
       <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
         <defs>
           <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#C25E30" />
-            <stop offset="50%" stopColor="#D97706" />
-            <stop offset="100%" stopColor="#437A5C" />
+            <stop offset="0%" stopColor="#4A7C59" />
+            <stop offset="50%" stopColor="#6E9F7C" />
+            <stop offset="100%" stopColor="#31593D" />
           </linearGradient>
           <filter id="glow">
             <feGaussianBlur stdDeviation="2" result="coloredBlur" />
@@ -42,7 +42,7 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke="rgba(184, 168, 146, 0.25)"
+          stroke="rgba(107, 142, 116, 0.22)"
           strokeWidth={strokeWidth}
           fill="transparent"
         />

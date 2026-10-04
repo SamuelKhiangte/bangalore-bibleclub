@@ -22,10 +22,10 @@ export const SimulatedSmsBanner: React.FC<SimulatedSmsBannerProps> = ({
         zIndex: 200,
         backgroundColor: 'rgba(255, 255, 255, 0.96)',
         backdropFilter: 'blur(20px)',
-        border: '1px solid rgba(194, 94, 48, 0.35)',
+        border: '1px solid var(--border-accent)',
         borderRadius: '20px',
         padding: '12px 16px',
-        boxShadow: '0 12px 30px rgba(60, 45, 30, 0.12), 0 0 20px rgba(194, 94, 48, 0.1)',
+        boxShadow: '0 12px 30px rgba(35, 60, 42, 0.12), 0 0 20px rgba(74, 124, 89, 0.12)',
         animation: 'slideDownToast 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
         cursor: 'pointer'
       }}

@@ -96,7 +96,7 @@ export const CreateReadingModal: React.FC<CreateReadingModalProps> = ({
         particleCount: 80,
         spread: 60,
         origin: { y: 0.6 },
-        colors: ['#C25E30', '#437A5C', '#E08256', '#D97706']
+        colors: ['#4A7C59', '#31593D', '#6E9F7C', '#A8636E', '#4D7871']
       });
     } catch {
       // Ignored if confetti unsupported

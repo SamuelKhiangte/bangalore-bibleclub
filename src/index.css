@@ -1,30 +1,30 @@
 :root {
-  /* Relaxing Warm Beige & Neutral Palette */
-  --bg-app: #F7F4EC;
+  /* Relaxing Sage Green, Matcha & Muted Green Palette */
+  --bg-app: #F3F6F3; /* Soothing pale matcha mist */
   --bg-surface: #FFFFFF;
-  --bg-card: rgba(255, 255, 255, 0.9);
-  --bg-card-hover: rgba(250, 247, 240, 0.98);
-  --bg-glass: rgba(255, 255, 255, 0.75);
+  --bg-card: rgba(255, 255, 255, 0.92);
+  --bg-card-hover: rgba(240, 246, 241, 0.98);
+  --bg-glass: rgba(243, 246, 243, 0.85);
   
-  --border-subtle: rgba(184, 168, 146, 0.25);
-  --border-accent: rgba(194, 94, 48, 0.35);
-  --border-emerald: rgba(67, 122, 92, 0.3);
+  --border-subtle: rgba(107, 142, 116, 0.22);
+  --border-accent: rgba(74, 124, 89, 0.35);
+  --border-emerald: rgba(49, 89, 61, 0.3);
 
-  /* Calming Accents: Terracotta, Warm Honey, Sage, Dusty Rose */
-  --accent-gold: #C25E30; /* Warm Terracotta */
-  --accent-gold-light: #E08256;
-  --accent-gold-glow: rgba(194, 94, 48, 0.2);
-  --accent-emerald: #437A5C; /* Calming Sage */
-  --accent-emerald-glow: rgba(67, 122, 92, 0.2);
-  --accent-blue: #4A7A96; /* Slate Blue */
-  --accent-rose: #C24B5E; /* Dusty Rose */
-  --accent-purple: #7E6B8F; /* Soft Lavender Gray */
+  /* Calming Matcha & Sage Accents */
+  --accent-gold: #4A7C59; /* Lush Sage / Matcha Primary */
+  --accent-gold-light: #6E9F7C; /* Soft Matcha Leaf */
+  --accent-gold-glow: rgba(74, 124, 89, 0.2);
+  --accent-emerald: #31593D; /* Deep Matcha Forest */
+  --accent-emerald-glow: rgba(49, 89, 61, 0.2);
+  --accent-blue: #4D7871; /* Eucalyptus Teal */
+  --accent-rose: #A8636E; /* Muted Tea Blossom */
+  --accent-purple: #6B7D6E; /* Herbaceous Sage Gray */
 
-  /* Relaxed Neutral Typography */
-  --text-primary: #2C2520; /* Deep Warm Espresso */
-  --text-secondary: #63574E; /* Gentle Cocoa */
-  --text-muted: #94877B; /* Warm Oat */
-  --text-accent: #C25E30;
+  /* Relaxed Green-Charcoal Typography */
+  --text-primary: #1C2920; /* Deep Evergreen Charcoal */
+  --text-secondary: #45594C; /* Earthy Muted Sage */
+  --text-muted: #788E7E; /* Soft Herbal Sage */
+  --text-accent: #3B6948;
 
   /* Informal & Relaxed Rounded Fonts */
   --font-main: 'Nunito', 'Plus Jakarta Sans', -apple-system, sans-serif;
@@ -35,9 +35,9 @@
   --radius-lg: 24px;
   --radius-full: 9999px;
 
-  --shadow-sm: 0 2px 8px rgba(60, 45, 30, 0.05);
-  --shadow-md: 0 10px 28px rgba(60, 45, 30, 0.08);
-  --shadow-glow: 0 0 24px rgba(194, 94, 48, 0.15);
+  --shadow-sm: 0 2px 8px rgba(35, 60, 42, 0.05);
+  --shadow-md: 0 10px 28px rgba(35, 60, 42, 0.08);
+  --shadow-glow: 0 0 24px rgba(74, 124, 89, 0.18);
 }
 
 * {
@@ -48,7 +48,7 @@
 }
 
 html, body {
-  background-color: #EDE8DE;
+  background-color: #DDE6DF;
   color: var(--text-primary);
   font-family: var(--font-main);
   min-height: 100vh;
@@ -66,11 +66,11 @@ html, body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 135, 123, 0.35);
+  background: rgba(120, 142, 126, 0.35);
   border-radius: var(--radius-full);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(194, 94, 48, 0.5);
+  background: rgba(74, 124, 89, 0.5);
 }
 
 /* Desktop App Container & Phone Mockup */
@@ -81,7 +81,7 @@ html, body {
   align-items: center;
   justify-content: center;
   padding: 24px 12px;
-  background: radial-gradient(circle at 50% 15%, #F5F1E6 0%, #E8E2D3 65%, #DDD5C4 100%);
+  background: radial-gradient(circle at 50% 15%, #EAF0EB 0%, #DCE6DD 65%, #CCDACF 100%);
   position: relative;
 }
 
@@ -99,7 +99,7 @@ html, body {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(12px);
   border: 1px solid var(--border-accent);
   border-radius: var(--radius-full);
@@ -109,15 +109,15 @@ html, body {
   font-family: var(--font-display);
   color: var(--accent-gold);
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(60, 45, 30, 0.08);
+  box-shadow: 0 4px 16px rgba(35, 60, 42, 0.08);
   transition: all 0.2s ease;
 }
 .viewport-mode-toggle:hover {
   transform: translateY(-1px);
-  background: #FFFBF5;
+  background: #F8FBF8;
 }
 
-/* Phone Bezel Frame - Soft warm ceramic/clay tone */
+/* Phone Bezel Frame - Soft muted sage ceramic tone */
 .phone-frame {
   width: 100%;
   max-width: 430px;
@@ -125,8 +125,8 @@ html, body {
   max-height: 92vh;
   background-color: var(--bg-app);
   border-radius: 46px;
-  border: 10px solid #DFD6C8;
-  box-shadow: 0 25px 60px -15px rgba(80, 60, 40, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.7), 0 0 30px rgba(194, 94, 48, 0.08);
+  border: 10px solid #CAD7CD;
+  box-shadow: 0 25px 60px -15px rgba(35, 60, 42, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.7), 0 0 30px rgba(74, 124, 89, 0.1);
   position: relative;
   overflow: hidden;
   display: flex;
@@ -209,23 +209,23 @@ html, body {
   border-radius: var(--radius-full);
 }
 
-/* Relaxing Warm Terracotta Gradient text */
+/* Sage / Matcha Green Gradient text */
 .text-gold-gradient {
-  background: linear-gradient(135deg, #C25E30 0%, #D97706 60%, #B45309 100%);
+  background: linear-gradient(135deg, #366141 0%, #4A7C59 50%, #2A5135 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Sage Gradient text */
+/* Deep Sage Gradient text */
 .text-emerald-gradient {
-  background: linear-gradient(135deg, #437A5C 0%, #2D5840 100%);
+  background: linear-gradient(135deg, #4A7C59 0%, #22422C 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 /* Button styles */
 .btn-primary {
-  background: linear-gradient(135deg, #C25E30 0%, #A84920 100%);
+  background: linear-gradient(135deg, #4A7C59 0%, #366141 100%);
   color: #FFFFFF;
   font-family: var(--font-display);
   font-weight: 700;
@@ -238,19 +238,19 @@ html, body {
   justify-content: center;
   gap: 8px;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(194, 94, 48, 0.25);
+  box-shadow: 0 4px 14px rgba(74, 124, 89, 0.28);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .btn-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(194, 94, 48, 0.35);
+  box-shadow: 0 6px 20px rgba(74, 124, 89, 0.38);
 }
 .btn-primary:active {
   transform: translateY(1px);
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
   color: var(--text-primary);
   font-family: var(--font-display);
   font-weight: 700;
@@ -267,7 +267,7 @@ html, body {
 }
 .btn-secondary:hover {
   background: #FFFFFF;
-  border-color: rgba(184, 168, 146, 0.4);
+  border-color: rgba(107, 142, 116, 0.4);
 }
 
 /* BeReal Tap-to-Swap Flip animation */
@@ -277,7 +277,7 @@ html, body {
   aspect-ratio: 4 / 5;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  background: #EAE3D5;
+  background: #E3EDE5;
   box-shadow: var(--shadow-md);
   border: 1px solid var(--border-subtle);
 }
@@ -298,7 +298,7 @@ html, body {
   border-radius: var(--radius-md);
   overflow: hidden;
   border: 2px solid #FFFFFF;
-  box-shadow: 0 6px 18px rgba(60, 45, 30, 0.2);
+  box-shadow: 0 6px 18px rgba(35, 60, 42, 0.2);
   cursor: pointer;
   z-index: 10;
   transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -317,7 +317,7 @@ html, body {
   bottom: 6px;
   left: 6px;
   right: 6px;
-  background: rgba(44, 37, 32, 0.75);
+  background: rgba(28, 41, 32, 0.75);
   backdrop-filter: blur(4px);
   border-radius: 6px;
   font-size: 9px;
@@ -336,8 +336,8 @@ html, body {
 }
 
 @keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 15px rgba(194, 94, 48, 0.15); }
-  50% { box-shadow: 0 0 25px rgba(194, 94, 48, 0.3); }
+  0%, 100% { box-shadow: 0 0 15px rgba(74, 124, 89, 0.15); }
+  50% { box-shadow: 0 0 25px rgba(74, 124, 89, 0.3); }
 }
 
 @keyframes floatBounce {

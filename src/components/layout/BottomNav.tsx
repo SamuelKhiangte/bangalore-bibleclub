@@ -23,7 +23,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
         left: 0,
         right: 0,
         height: '70px',
-        backgroundColor: 'rgba(247, 244, 236, 0.96)',
+        backgroundColor: 'rgba(243, 246, 243, 0.96)',
         backdropFilter: 'blur(20px)',
         borderTop: '1px solid var(--border-subtle)',
         display: 'flex',
@@ -73,7 +73,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
         <span style={{ fontSize: '11px', fontWeight: activeTab === 'progress' ? 800 : 600 }}>Tracker</span>
       </button>
 
-      {/* Primary Center Capture Button - Warm Terracotta */}
+      {/* Primary Center Capture Button - Matcha Sage Green */}
       <button
         onClick={onOpenCapture}
         style={{
@@ -82,13 +82,13 @@ export const BottomNav: React.FC<BottomNavProps> = ({
           width: '54px',
           height: '54px',
           borderRadius: '50%',
-          background: 'linear-gradient(135deg, #C25E30 0%, #A84920 100%)',
-          border: '3px solid #F7F4EC',
+          background: 'linear-gradient(135deg, #4A7C59 0%, #366141 100%)',
+          border: '3px solid #F3F6F3',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           color: '#FFFFFF',
-          boxShadow: '0 8px 24px rgba(194, 94, 48, 0.35)',
+          boxShadow: '0 8px 24px rgba(74, 124, 89, 0.35)',
           cursor: 'pointer',
           transform: 'scale(1)',
           transition: 'all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)'

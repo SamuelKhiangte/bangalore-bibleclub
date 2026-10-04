@@ -112,7 +112,7 @@ export const BookChapterMatrix: React.FC<BookChapterMatrixProps> = ({
                     width: '34px',
                     height: '34px',
                     borderRadius: '10px',
-                    backgroundColor: isComplete ? 'rgba(67, 122, 92, 0.15)' : 'rgba(194, 94, 48, 0.1)',
+                    backgroundColor: isComplete ? 'rgba(49, 89, 61, 0.18)' : 'rgba(74, 124, 89, 0.12)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',

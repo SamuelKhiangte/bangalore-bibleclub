@@ -22,7 +22,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ user, onLogout }) => {
           textAlign: 'center',
           borderRadius: '24px',
           border: '1px solid var(--border-accent)',
-          background: 'radial-gradient(circle at 50% 20%, rgba(194, 94, 48, 0.1) 0%, rgba(255, 255, 255, 0.95) 80%)'
+          background: 'radial-gradient(circle at 50% 20%, rgba(74, 124, 89, 0.12) 0%, rgba(255, 255, 255, 0.95) 80%)'
         }}
       >
         <div style={{ position: 'relative', width: '84px', height: '84px', margin: '0 auto 14px' }}>
@@ -68,7 +68,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ user, onLogout }) => {
       {/* Stats Summary Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
         <div className="glass-panel" style={{ padding: '14px', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ width: '38px', height: '38px', borderRadius: '12px', backgroundColor: 'rgba(194, 94, 48, 0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-gold)' }}>
+          <div style={{ width: '38px', height: '38px', borderRadius: '12px', backgroundColor: 'rgba(74, 124, 89, 0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-gold)' }}>
             <Flame size={20} fill="var(--accent-gold)" />
           </div>
           <div>

@@ -73,10 +73,10 @@ export const VerseQAView: React.FC<VerseQAViewProps> = ({ currentUser }) => {
         className="glass-panel"
         style={{
           padding: '18px 20px',
-          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(247, 244, 236, 0.95) 100%)',
+          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(243, 246, 243, 0.95) 100%)',
           borderRadius: '24px',
           border: '1px solid var(--border-accent)',
-          boxShadow: '0 8px 24px rgba(194, 94, 48, 0.08)',
+          boxShadow: '0 8px 24px rgba(74, 124, 89, 0.08)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between'

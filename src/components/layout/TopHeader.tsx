@@ -26,7 +26,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
         alignItems: 'center',
         justifyContent: 'space-between',
         borderBottom: '1px solid var(--border-subtle)',
-        backgroundColor: 'rgba(247, 244, 236, 0.92)',
+        backgroundColor: 'rgba(243, 246, 243, 0.92)',
         backdropFilter: 'blur(16px)',
         position: 'sticky',
         top: 0,
@@ -43,7 +43,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
             width: '32px',
             height: '32px',
             borderRadius: '10px',
-            backgroundColor: 'rgba(194, 94, 48, 0.12)',
+            backgroundColor: 'rgba(74, 124, 89, 0.12)',
             border: '1px solid var(--border-accent)',
             display: 'flex',
             alignItems: 'center',
@@ -79,7 +79,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
           onClick={onSimulateReading}
           title="Simulate friend reading (triggers group notification)"
           style={{
-            background: 'rgba(194, 94, 48, 0.1)',
+            background: 'rgba(74, 124, 89, 0.1)',
             border: '1px solid var(--border-accent)',
             borderRadius: '9999px',
             padding: '4px 9px',
@@ -104,7 +104,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
             display: 'flex',
             alignItems: 'center',
             gap: '4px',
-            backgroundColor: 'rgba(194, 94, 48, 0.1)',
+            backgroundColor: 'rgba(74, 124, 89, 0.1)',
             border: '1px solid var(--border-accent)',
             padding: '4px 9px',
             borderRadius: '9999px',
@@ -122,7 +122,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
           onClick={() => onTabChange('notifications')}
           style={{
             position: 'relative',
-            background: activeTab === 'notifications' ? 'rgba(194, 94, 48, 0.15)' : 'rgba(255, 255, 255, 0.9)',
+            background: activeTab === 'notifications' ? 'rgba(74, 124, 89, 0.15)' : 'rgba(255, 255, 255, 0.9)',
             border: '1px solid var(--border-subtle)',
             borderRadius: '50%',
             width: '34px',

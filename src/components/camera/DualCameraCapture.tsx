@@ -314,7 +314,7 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
                     width: '60px',
                     height: '60px',
                     borderRadius: '50%',
-                    backgroundColor: 'rgba(194, 94, 48, 0.2)',
+                    backgroundColor: 'rgba(74, 124, 89, 0.2)',
                     border: '1px solid var(--border-accent)',
                     display: 'flex',
                     alignItems: 'center',
@@ -394,7 +394,7 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
                   aspectRatio: '3 / 4',
                   borderRadius: '12px',
                   overflow: 'hidden',
-                  border: '2px solid #C25E30',
+                  border: '2px solid #4A7C59',
                   boxShadow: '0 6px 18px rgba(0, 0, 0, 0.5)'
                 }}
               >
@@ -494,7 +494,7 @@ export const DualCameraCapture: React.FC<DualCameraCaptureProps> = ({
                 width: '46px',
                 height: '46px',
                 borderRadius: '50%',
-                background: 'rgba(194, 94, 48, 0.2)',
+                background: 'rgba(74, 124, 89, 0.2)',
                 border: '1px solid var(--border-accent)',
                 display: 'flex',
                 alignItems: 'center',

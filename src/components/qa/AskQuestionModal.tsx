@@ -96,7 +96,7 @@ export const AskQuestionModal: React.FC<AskQuestionModalProps> = ({
                 width: '32px',
                 height: '32px',
                 borderRadius: '8px',
-                backgroundColor: 'rgba(194, 94, 48, 0.12)',
+                backgroundColor: 'rgba(74, 124, 89, 0.12)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',

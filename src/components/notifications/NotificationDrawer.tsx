@@ -90,7 +90,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            boxShadow: '0 4px 16px rgba(194, 94, 48, 0.1)'
+            boxShadow: '0 4px 16px rgba(74, 124, 89, 0.1)'
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -99,7 +99,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
                 width: '36px',
                 height: '36px',
                 borderRadius: '12px',
-                backgroundColor: 'rgba(194, 94, 48, 0.15)',
+                backgroundColor: 'rgba(74, 124, 89, 0.15)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -151,7 +151,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
               backgroundColor: notif.read ? 'rgba(255, 255, 255, 0.6)' : '#FFFFFF',
               border: notif.read ? '1px solid var(--border-subtle)' : '1px solid var(--border-accent)',
               position: 'relative',
-              boxShadow: notif.read ? 'none' : '0 4px 14px rgba(194, 94, 48, 0.08)'
+              boxShadow: notif.read ? 'none' : '0 4px 14px rgba(74, 124, 89, 0.12)'
             }}
           >
             {/* Unread Glowing Dot */}
