@@ -26,9 +26,10 @@
   --text-muted: #788E7E; /* Soft Herbal Sage */
   --text-accent: #3B6948;
 
-  /* Informal & Relaxed Rounded Fonts */
-  --font-main: 'Nunito', 'Plus Jakarta Sans', -apple-system, sans-serif;
-  --font-display: 'Quicksand', 'Nunito', sans-serif;
+  /* Editorial Serif & Clean Sans Typography */
+  --font-main: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
 
   --radius-sm: 10px;
   --radius-md: 16px;
@@ -344,3 +345,72 @@ html, body {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-4px); }
 }
+
+/* Editorial Design Language Utilities */
+.editorial-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  color: var(--text-primary);
+}
+
+.editorial-italic {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+.editorial-tag {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--accent-gold);
+}
+
+.editorial-pill-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #FFFFFF;
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  padding: 10px 18px;
+  box-shadow: 0 4px 16px rgba(35, 60, 42, 0.05);
+  transition: all 0.2s ease;
+}
+.editorial-pill-search:focus-within {
+  border-color: var(--accent-gold);
+  box-shadow: 0 4px 18px rgba(74, 124, 89, 0.15);
+}
+
+.editorial-browser-frame {
+  background: #FFFFFF;
+  border-radius: 20px;
+  border: 1px solid var(--border-subtle);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.editorial-browser-header {
+  background: #E8EFE9;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.browser-dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.browser-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #A6BEAC;
+}
+

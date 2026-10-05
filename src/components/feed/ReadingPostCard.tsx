@@ -110,18 +110,19 @@ export const ReadingPostCard: React.FC<ReadingPostCardProps> = ({
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '5px',
-            background: 'linear-gradient(135deg, rgba(74, 124, 89, 0.15), rgba(49, 89, 61, 0.1))',
+            gap: '6px',
+            backgroundColor: '#FAF7F2',
             border: '1px solid var(--border-accent)',
             borderRadius: '9999px',
-            padding: '5px 12px',
+            padding: '5px 14px',
             color: 'var(--accent-gold)',
-            fontSize: '12px',
-            fontWeight: 800,
+            fontSize: '14px',
+            fontWeight: 600,
+            fontStyle: 'italic',
             fontFamily: 'var(--font-display)'
           }}
         >
-          <BookOpen size={13} />
+          <BookOpen size={14} />
           <span>{passageTitle}</span>
         </div>
       </div>
@@ -142,13 +143,14 @@ export const ReadingPostCard: React.FC<ReadingPostCardProps> = ({
         <div
           style={{
             margin: '12px 14px 0',
-            padding: '12px 16px',
-            borderRadius: '14px',
-            backgroundColor: '#F9F7F1',
+            padding: '14px 18px',
+            borderRadius: '16px',
+            backgroundColor: '#FAF7F2',
             borderLeft: '3px solid var(--accent-gold)',
-            fontSize: '13px',
-            lineHeight: '1.5',
-            color: 'var(--text-secondary)',
+            fontSize: '15px',
+            lineHeight: '1.45',
+            color: 'var(--text-primary)',
+            fontFamily: 'var(--font-display)',
             fontStyle: 'italic'
           }}
         >

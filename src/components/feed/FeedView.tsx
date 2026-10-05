@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Users, Sparkles } from 'lucide-react';
+import { Plus, Check, Share2, Search, BookOpen } from 'lucide-react';
 import { ReadingPostCard } from './ReadingPostCard.tsx';
+import { BotanicalArt } from '../common/BotanicalArt.tsx';
 import { BibleRealDB } from '../../services/storage.ts';
 import type { ReadingPost, UserProfile } from '../../types/index.ts';
 
@@ -11,6 +12,7 @@ interface FeedViewProps {
 
 export const FeedView: React.FC<FeedViewProps> = ({ currentUser, onOpenCreatePost }) => {
   const [posts, setPosts] = useState<ReadingPost[]>([]);
+  const [copiedInvite, setCopiedInvite] = useState(false);
 
   const loadPosts = () => {
     setPosts(BibleRealDB.getPosts());
@@ -37,25 +39,174 @@ export const FeedView: React.FC<FeedViewProps> = ({ currentUser, onOpenCreatePos
     });
   };
 
+  const handleInviteCircle = async () => {
+    const inviteText = `Join my daily Bible reading circle on Bangalore BibleClub! Track chapters and share reflections together.`;
+    const inviteUrl = window.location.origin;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Bangalore BibleClub Invite',
+          text: inviteText,
+          url: inviteUrl
+        });
+        return;
+      } catch {
+        // Fallback to clipboard if user cancels or share fails
+      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(`${inviteText} ${inviteUrl}`);
+      setCopiedInvite(true);
+      setTimeout(() => setCopiedInvite(false), 2800);
+    } catch {
+      alert('Invite link: ' + inviteUrl);
+    }
+  };
+
   const hasPostedToday = posts.some(
     (p) => p.userId === currentUser.id && new Date(p.createdAt).toDateString() === new Date().toDateString()
   );
 
   return (
-    <div style={{ padding: '16px 14px', maxWidth: '500px', margin: '0 auto' }}>
-      {/* Circle Story Avatars */}
+    <div style={{ padding: '16px 16px 32px', maxWidth: '520px', margin: '0 auto' }}>
+      {/* Toast Notification when invite link is copied */}
+      {copiedInvite && (
+        <div
+          style={{
+            position: 'fixed',
+            top: '72px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            backgroundColor: 'var(--text-primary)',
+            color: '#FFFFFF',
+            padding: '10px 18px',
+            borderRadius: '9999px',
+            fontSize: '12px',
+            fontWeight: 600,
+            zIndex: 100,
+            boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            animation: 'slideDownToast 0.25s ease'
+          }}
+        >
+          <Check size={14} color="#6E9F7C" />
+          <span>Invite link copied to clipboard!</span>
+        </div>
+      )}
+
+      {/* Editorial Hero Header (Inspired by reference aesthetic) */}
+      <div
+        style={{
+          position: 'relative',
+          padding: '24px 18px 20px',
+          marginBottom: '20px',
+          overflow: 'hidden',
+          backgroundColor: '#FAF7F2',
+          borderRadius: '26px',
+          border: '1px solid var(--border-subtle)'
+        }}
+      >
+        {/* Botanical line-art illustration positioned on right */}
+        <div
+          style={{
+            position: 'absolute',
+            top: '-8px',
+            right: '8px',
+            opacity: 0.75,
+            pointerEvents: 'none',
+            zIndex: 0
+          }}
+        >
+          <BotanicalArt width={95} height={145} color="var(--accent-gold)" />
+        </div>
+
+        {/* Editorial Title & Subtitle */}
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: '270px' }}>
+          <h1
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '36px',
+              fontWeight: 400,
+              lineHeight: 1.05,
+              letterSpacing: '-0.02em',
+              color: 'var(--text-primary)',
+              marginBottom: '8px'
+            }}
+          >
+            visit the word
+          </h1>
+          <p
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontStyle: 'italic',
+              fontSize: '16px',
+              color: 'var(--accent-gold)',
+              lineHeight: 1.2
+            }}
+          >
+            Start your scripture journey
+          </p>
+        </div>
+
+        {/* Editorial Pill Search / Scripture Jump Bar (matching the reference search bar) */}
+        <div
+          onClick={onOpenCreatePost}
+          className="editorial-pill-search"
+          style={{
+            marginTop: '22px',
+            cursor: 'pointer',
+            position: 'relative',
+            zIndex: 1,
+            justifyContent: 'space-between'
+          }}
+          title="Search books or log today's passage"
+        >
+          <span
+            style={{
+              fontFamily: 'var(--font-main)',
+              fontSize: '11px',
+              fontWeight: 700,
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              color: 'var(--text-secondary)'
+            }}
+          >
+            Log Reading • Start & End Verse
+          </span>
+          <div
+            style={{
+              width: '28px',
+              height: '28px',
+              borderRadius: '50%',
+              backgroundColor: 'rgba(74, 124, 89, 0.1)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--accent-gold)'
+            }}
+          >
+            <Search size={14} strokeWidth={2.2} />
+          </div>
+        </div>
+      </div>
+
+      {/* Circle Stories & Member Actions (Real Members Only) */}
       <div
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '14px',
+          gap: '16px',
           paddingBottom: '16px',
-          overflowX: 'auto',
+          marginBottom: '20px',
           borderBottom: '1px solid var(--border-subtle)',
-          marginBottom: '16px'
+          overflowX: 'auto'
         }}
       >
-        {/* User Story / Snap Button */}
+        {/* Real User's Story */}
         <div
           onClick={onOpenCreatePost}
           style={{
@@ -74,7 +225,8 @@ export const FeedView: React.FC<FeedViewProps> = ({ currentUser, onOpenCreatePos
               height: '56px',
               borderRadius: '50%',
               padding: '2px',
-              border: hasPostedToday ? '2px solid var(--accent-emerald)' : '2px dashed var(--accent-gold)'
+              border: hasPostedToday ? '2px solid var(--accent-gold)' : '2px dashed var(--accent-gold-light)',
+              backgroundColor: '#FFFFFF'
             }}
           >
             <img
@@ -87,115 +239,141 @@ export const FeedView: React.FC<FeedViewProps> = ({ currentUser, onOpenCreatePos
                 position: 'absolute',
                 bottom: '-2px',
                 right: '-2px',
-                backgroundColor: hasPostedToday ? 'var(--accent-emerald)' : 'var(--accent-gold)',
+                backgroundColor: hasPostedToday ? 'var(--accent-gold)' : 'var(--accent-gold-light)',
                 color: '#fff',
                 borderRadius: '50%',
                 width: '18px',
                 height: '18px',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: 900
+                justifyContent: 'center'
               }}
             >
-              <Plus size={12} strokeWidth={3} />
+              {hasPostedToday ? <Check size={11} strokeWidth={3} /> : <Plus size={11} strokeWidth={3} />}
             </div>
           </div>
-          <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', fontFamily: 'var(--font-display)' }}>
-            {hasPostedToday ? 'Your Post' : 'Post Reading'}
+          <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>
+            {hasPostedToday ? 'Logged' : 'You'}
           </span>
         </div>
 
-        {/* Friends Stories from Bangalore BibleClub */}
-        {[
-          { name: 'Sarah', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&auto=format&fit=crop&q=80', read: 'Hebrews 11', online: true },
-          { name: 'David', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=80', read: 'John 1', online: true },
-          { name: 'Michael', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&auto=format&fit=crop&q=80', read: 'Romans 8', online: false },
-          { name: 'Hannah', avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=120&auto=format&fit=crop&q=80', read: 'Psalms 23', online: false }
-        ].map((friend) => (
+        {/* Real Circle Invite Button */}
+        <div
+          onClick={handleInviteCircle}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '6px',
+            cursor: 'pointer',
+            flexShrink: 0
+          }}
+        >
           <div
-            key={friend.name}
             style={{
+              width: '56px',
+              height: '56px',
+              borderRadius: '50%',
+              border: '1.5px dashed var(--border-accent)',
               display: 'flex',
-              flexDirection: 'column',
               alignItems: 'center',
-              gap: '6px',
-              flexShrink: 0
+              justifyContent: 'center',
+              backgroundColor: '#FFFFFF',
+              color: 'var(--accent-gold)',
+              transition: 'all 0.2s ease'
             }}
           >
-            <div
-              style={{
-                position: 'relative',
-                width: '56px',
-                height: '56px',
-                borderRadius: '50%',
-                padding: '2px',
-                border: '2px solid var(--accent-gold)'
-              }}
-            >
-              <img
-                src={friend.avatar}
-                alt={friend.name}
-                style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
-              />
-              {friend.online && (
-                <div
-                  style={{
-                    position: 'absolute',
-                    bottom: '0',
-                    right: '0',
-                    backgroundColor: 'var(--accent-emerald)',
-                    borderRadius: '50%',
-                    width: '12px',
-                    height: '12px',
-                    border: '2px solid #FFFFFF'
-                  }}
-                />
-              )}
-            </div>
-            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', fontFamily: 'var(--font-display)' }}>
-              {friend.name}
-            </span>
+            <Share2 size={18} strokeWidth={1.8} />
           </div>
-        ))}
+          <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>
+            Invite
+          </span>
+        </div>
+
+        {/* Circle Info Tag */}
+        <div
+          style={{
+            marginLeft: 'auto',
+            padding: '6px 12px',
+            borderRadius: '9999px',
+            backgroundColor: '#FAF7F2',
+            border: '1px solid var(--border-subtle)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            flexShrink: 0
+          }}
+        >
+          <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--accent-gold)' }} />
+          <span
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontStyle: 'italic',
+              fontSize: '13px',
+              color: 'var(--text-secondary)'
+            }}
+          >
+            Bangalore Circle
+          </span>
+        </div>
       </div>
 
-      {/* Daily Banner Callout if User Has Not Read Today */}
+      {/* Daily Callout Card (Editorial Browser-Frame Style) */}
       {!hasPostedToday && (
         <div
           onClick={onOpenCreatePost}
-          className="glass-panel"
+          className="editorial-browser-frame"
           style={{
-            padding: '16px 18px',
-            marginBottom: '20px',
-            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(243, 246, 243, 0.95) 100%)',
-            border: '1px solid var(--border-accent)',
-            borderRadius: '20px',
+            marginBottom: '24px',
             cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            boxShadow: '0 8px 24px rgba(74, 124, 89, 0.1)'
+            transition: 'transform 0.2s ease',
+            backgroundColor: '#FFFFFF'
           }}
         >
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <Sparkles size={16} color="var(--accent-gold)" />
-              <span style={{ fontSize: '14px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>
-                Time for Today's Bible Reading!
-              </span>
+          {/* Top Browser Bar Dots */}
+          <div className="editorial-browser-header">
+            <div className="browser-dots">
+              <div className="browser-dot" />
+              <div className="browser-dot" />
+              <div className="browser-dot" />
             </div>
-            <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '3px' }}>
-              Snap your start & end verse to keep your reading streak alive.
-            </p>
+            <span
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontStyle: 'italic',
+                fontSize: '12px',
+                color: 'var(--accent-gold)'
+              }}
+            >
+              daily reflection
+            </span>
           </div>
 
-          <button
-            className="btn-primary"
-            style={{ padding: '8px 14px', fontSize: '12px', borderRadius: '20px', flexShrink: 0 }}
-          >
-            Snap Now
-          </button>
+          <div style={{ padding: '18px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div>
+              <h3
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: '20px',
+                  fontWeight: 600,
+                  color: 'var(--text-primary)',
+                  letterSpacing: '-0.01em'
+                }}
+              >
+                Today's Scripture Reading
+              </h3>
+              <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px', lineHeight: 1.4 }}>
+                Dual photo capture of your start verse & end verse.
+              </p>
+            </div>
+
+            <button
+              className="btn-primary"
+              style={{ padding: '9px 16px', fontSize: '12px', borderRadius: '9999px', flexShrink: 0 }}
+            >
+              Begin
+            </button>
+          </div>
         </div>
       )}
 
@@ -211,20 +389,65 @@ export const FeedView: React.FC<FeedViewProps> = ({ currentUser, onOpenCreatePos
           />
         ))}
 
+        {/* Real-Use Empty State with Botanical Line Art */}
         {posts.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-secondary)' }}>
-            <Users size={40} color="var(--accent-gold)" style={{ margin: '0 auto 12px' }} />
-            <h3 style={{ fontSize: '17px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>No posts yet today</h3>
-            <p style={{ fontSize: '13px', marginTop: '6px' }}>
-              Be the first in Bangalore BibleClub to snap your reading journey!
-            </p>
-            <button
-              className="btn-primary"
-              onClick={onOpenCreatePost}
-              style={{ marginTop: '16px' }}
+          <div
+            style={{
+              textAlign: 'center',
+              padding: '48px 24px',
+              backgroundColor: '#FAF7F2',
+              borderRadius: '26px',
+              border: '1px solid var(--border-subtle)',
+              margin: '10px 0'
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '14px' }}>
+              <BotanicalArt width={70} height={105} color="var(--accent-gold)" />
+            </div>
+            <h3
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '26px',
+                fontWeight: 500,
+                color: 'var(--text-primary)',
+                letterSpacing: '-0.02em',
+                lineHeight: 1.2
+              }}
             >
-              Post First Reading
-            </button>
+              your journey begins here
+            </h3>
+            <p
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontStyle: 'italic',
+                fontSize: '15px',
+                color: 'var(--text-secondary)',
+                marginTop: '8px',
+                maxWidth: '280px',
+                margin: '8px auto 0',
+                lineHeight: 1.4
+              }}
+            >
+              Log your start and end verses to record your first step through the Bible.
+            </p>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '22px' }}>
+              <button
+                className="btn-primary"
+                onClick={onOpenCreatePost}
+                style={{ padding: '10px 20px', borderRadius: '9999px', fontSize: '13px' }}
+              >
+                <BookOpen size={14} />
+                <span>Log First Reading</span>
+              </button>
+              <button
+                className="btn-secondary"
+                onClick={handleInviteCircle}
+                style={{ padding: '10px 18px', borderRadius: '9999px', fontSize: '13px' }}
+              >
+                <Share2 size={13} />
+                <span>Invite Circle</span>
+              </button>
+            </div>
           </div>
         )}
       </div>

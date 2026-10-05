@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, Flame, Bell, Sparkles, Smartphone } from 'lucide-react';
+import { BookOpen, Flame, Bell, Smartphone } from 'lucide-react';
 import type { UserProfile, ActiveTab } from '../../types/index.ts';
 
 interface TopHeaderProps {
@@ -7,7 +7,6 @@ interface TopHeaderProps {
   activeTab: ActiveTab;
   unreadCount: number;
   onTabChange: (tab: ActiveTab) => void;
-  onSimulateReading: () => void;
   onOpenInstall?: () => void;
 }
 
@@ -16,35 +15,34 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
   activeTab,
   unreadCount,
   onTabChange,
-  onSimulateReading,
   onOpenInstall
 }) => {
   return (
     <header
       style={{
-        height: '58px',
+        height: '62px',
         padding: '0 16px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         borderBottom: '1px solid var(--border-subtle)',
-        backgroundColor: 'rgba(243, 246, 243, 0.92)',
+        backgroundColor: 'rgba(243, 246, 243, 0.94)',
         backdropFilter: 'blur(16px)',
         position: 'sticky',
         top: 0,
         zIndex: 40
       }}
     >
-      {/* Brand Logo & Name */}
+      {/* Brand Logo & Editorial Title */}
       <div
         onClick={() => onTabChange('feed')}
-        style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
+        style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}
       >
         <div
           style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '10px',
+            width: '34px',
+            height: '34px',
+            borderRadius: '12px',
             backgroundColor: 'rgba(74, 124, 89, 0.12)',
             border: '1px solid var(--border-accent)',
             display: 'flex',
@@ -53,23 +51,31 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
             color: 'var(--accent-gold)'
           }}
         >
-          <BookOpen size={16} />
+          <BookOpen size={17} strokeWidth={1.8} />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <span
-            className="text-gold-gradient"
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: '17px',
-              fontWeight: 800,
-              letterSpacing: '-0.3px',
-              lineHeight: 1.1
+              fontSize: '20px',
+              fontWeight: 600,
+              letterSpacing: '-0.02em',
+              lineHeight: 1.1,
+              color: 'var(--text-primary)'
             }}
           >
-            Bangalore BibleClub
+            bangalore bibleclub
           </span>
-          <span style={{ fontSize: '9px', fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.4px' }}>
-            DAILY READING CIRCLE
+          <span
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontStyle: 'italic',
+              fontSize: '12px',
+              color: 'var(--accent-gold)',
+              lineHeight: 1
+            }}
+          >
+            daily scripture journey
           </span>
         </div>
       </div>
@@ -82,47 +88,24 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
             onClick={onOpenInstall}
             title="Install App on Phone / Add to Home Screen"
             style={{
-              background: 'rgba(74, 124, 89, 0.12)',
+              background: 'rgba(74, 124, 89, 0.1)',
               border: '1px solid var(--border-accent)',
               borderRadius: '9999px',
-              padding: '4px 8px',
+              padding: '5px 10px',
               display: 'flex',
               alignItems: 'center',
               gap: '4px',
               color: 'var(--accent-gold)',
               fontSize: '11px',
-              fontWeight: 700,
+              fontWeight: 600,
               cursor: 'pointer',
-              fontFamily: 'var(--font-display)'
+              fontFamily: 'var(--font-main)'
             }}
           >
             <Smartphone size={12} />
             <span>Install</span>
           </button>
         )}
-
-        {/* Simulate Reading Quick Button */}
-        <button
-          onClick={onSimulateReading}
-          title="Simulate friend reading (triggers group notification)"
-          style={{
-            background: 'rgba(74, 124, 89, 0.1)',
-            border: '1px solid var(--border-accent)',
-            borderRadius: '9999px',
-            padding: '4px 9px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-            color: 'var(--accent-gold)',
-            fontSize: '11px',
-            fontWeight: 700,
-            cursor: 'pointer',
-            fontFamily: 'var(--font-display)'
-          }}
-        >
-          <Sparkles size={12} />
-          <span>Simulate</span>
-        </button>
 
         {/* Streak Flame Pill */}
         <div

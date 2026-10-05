@@ -1,10 +1,4 @@
 import type { UserProfile, ReadingPost, GroupNotification, VerseQuestion, QuestionAnswer } from '../types/index.ts';
-import {
-  SAMPLE_START_PHOTO,
-  SAMPLE_END_PHOTO,
-  SAMPLE_JOHN_START,
-  SAMPLE_JOHN_END
-} from '../data/sampleBiblePhotos.ts';
 
 const USER_KEY = 'bangalore_bibleclub_user';
 const PROGRESS_KEY = 'bangalore_bibleclub_completed_chapters';
@@ -12,138 +6,10 @@ const POSTS_KEY = 'bangalore_bibleclub_posts';
 const NOTIFICATIONS_KEY = 'bangalore_bibleclub_notifications';
 const QUESTIONS_KEY = 'bangalore_bibleclub_questions';
 
-export const DEFAULT_FRIEND_POSTS: ReadingPost[] = [
-  {
-    id: 'post-sarah-1',
-    userId: 'user-sarah',
-    userName: 'Sarah Jenkins',
-    userAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
-    startPhotoUrl: SAMPLE_START_PHOTO,
-    endPhotoUrl: SAMPLE_END_PHOTO,
-    bookId: 'hebrews',
-    bookName: 'Hebrews',
-    startChapter: 11,
-    startVerse: 1,
-    endChapter: 11,
-    endVerse: 40,
-    chaptersCount: 1,
-    durationMinutes: 14,
-    reflection: 'The Hall of Faith reminder this morning was so uplifting. Faith sees beyond what is visible.',
-    createdAt: new Date(Date.now() - 1000 * 60 * 45).toISOString(), // 45m ago
-    reactions: {
-      '🙏': ['user-david', 'user-sarah'],
-      '❤️': ['user-david'],
-      '🔥': ['user-michael']
-    },
-    comments: [
-      {
-        id: 'c-1',
-        userId: 'user-david',
-        userName: 'David Miller',
-        userAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
-        text: 'Amen sister! Verse 1 has carried me through so much.',
-        createdAt: new Date(Date.now() - 1000 * 60 * 30).toISOString()
-      }
-    ]
-  },
-  {
-    id: 'post-david-1',
-    userId: 'user-david',
-    userName: 'David Miller',
-    userAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
-    startPhotoUrl: SAMPLE_JOHN_START,
-    endPhotoUrl: SAMPLE_JOHN_END,
-    bookId: 'john',
-    bookName: 'John',
-    startChapter: 1,
-    startVerse: 1,
-    endChapter: 1,
-    endVerse: 18,
-    chaptersCount: 1,
-    durationMinutes: 18,
-    reflection: 'In the beginning was the Word! Incredible revelation of Christ as light and truth.',
-    createdAt: new Date(Date.now() - 1000 * 60 * 180).toISOString(), // 3h ago
-    reactions: {
-      '🙏': ['user-sarah'],
-      '💡': ['user-sarah', 'user-michael']
-    },
-    comments: []
-  }
-];
+export const DEFAULT_FRIEND_POSTS: ReadingPost[] = [];
+export const DEFAULT_NOTIFICATIONS: GroupNotification[] = [];
+export const DEFAULT_QUESTIONS: VerseQuestion[] = [];
 
-export const DEFAULT_NOTIFICATIONS: GroupNotification[] = [
-  {
-    id: 'notif-1',
-    type: 'reading_completed',
-    actorName: 'Sarah Jenkins',
-    actorAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
-    title: 'Reading Completed',
-    message: 'Sarah finished reading Hebrews 11:1–40 (Faith Chapter)',
-    postId: 'post-sarah-1',
-    timestamp: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
-    read: false
-  },
-  {
-    id: 'notif-2',
-    type: 'reading_completed',
-    actorName: 'David Miller',
-    actorAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
-    title: 'Reading Completed',
-    message: 'David finished reading John 1:1–18',
-    postId: 'post-david-1',
-    timestamp: new Date(Date.now() - 1000 * 60 * 180).toISOString(),
-    read: true
-  }
-];
-
-export const DEFAULT_QUESTIONS: VerseQuestion[] = [
-  {
-    id: 'q-1',
-    userId: 'user-sarah',
-    userName: 'Sarah Jenkins',
-    userAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
-    verseReference: 'John 15:5',
-    bookId: 'john',
-    questionText: "What does Jesus mean by 'apart from Me you can do nothing'? How does this work in our daily Bangalore work/study routine?",
-    contextNote: 'Reading chapter 15 this morning on the True Vine.',
-    createdAt: new Date(Date.now() - 1000 * 60 * 120).toISOString(),
-    upvotes: ['user-david', 'user-michael'],
-    answers: [
-      {
-        id: 'ans-1',
-        userId: 'user-david',
-        userName: 'David Miller',
-        userAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
-        text: 'It means spiritual fruit and lasting peace only come when we remain connected to Him through prayer and humility, just like branches drawing sap from the vine.',
-        createdAt: new Date(Date.now() - 1000 * 60 * 90).toISOString(),
-        upvotes: ['user-sarah'],
-        isBestAnswer: true
-      }
-    ]
-  },
-  {
-    id: 'q-2',
-    userId: 'user-michael',
-    userName: 'Michael Chang',
-    userAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
-    verseReference: 'Romans 8:28',
-    bookId: 'romans',
-    questionText: 'When friends go through heartbreak or layoffs, how should we share Romans 8:28 without sounding insensitive?',
-    createdAt: new Date(Date.now() - 1000 * 60 * 300).toISOString(),
-    upvotes: ['user-david'],
-    answers: [
-      {
-        id: 'ans-2',
-        userId: 'user-sarah',
-        userName: 'Sarah Jenkins',
-        userAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80',
-        text: 'Paul wrote this from imprisonment and hardship. We should weep with those who weep first, and gently remind them that God will redeem their pain, rather than dismissing their grief.',
-        createdAt: new Date(Date.now() - 1000 * 60 * 240).toISOString(),
-        upvotes: ['user-michael', 'user-david']
-      }
-    ]
-  }
-];
 
 class StorageService {
   private listeners: Array<() => void> = [];
@@ -242,13 +108,19 @@ class StorageService {
   getPosts(): ReadingPost[] {
     const raw = localStorage.getItem(POSTS_KEY);
     if (!raw) {
-      localStorage.setItem(POSTS_KEY, JSON.stringify(DEFAULT_FRIEND_POSTS));
-      return DEFAULT_FRIEND_POSTS;
+      return [];
     }
     try {
-      return JSON.parse(raw);
+      const parsed: ReadingPost[] = JSON.parse(raw);
+      const filtered = parsed.filter(
+        (p) => !['user-sarah', 'user-david', 'user-michael', 'user-hannah'].includes(p.userId)
+      );
+      if (filtered.length !== parsed.length) {
+        localStorage.setItem(POSTS_KEY, JSON.stringify(filtered));
+      }
+      return filtered;
     } catch {
-      return DEFAULT_FRIEND_POSTS;
+      return [];
     }
   }
 
@@ -296,13 +168,19 @@ class StorageService {
   getNotifications(): GroupNotification[] {
     const raw = localStorage.getItem(NOTIFICATIONS_KEY);
     if (!raw) {
-      localStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(DEFAULT_NOTIFICATIONS));
-      return DEFAULT_NOTIFICATIONS;
+      return [];
     }
     try {
-      return JSON.parse(raw);
+      const parsed: GroupNotification[] = JSON.parse(raw);
+      const filtered = parsed.filter(
+        (n) => !['Sarah Jenkins', 'David Miller', 'Michael Chang', 'Hannah Abbott'].includes(n.actorName)
+      );
+      if (filtered.length !== parsed.length) {
+        localStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(filtered));
+      }
+      return filtered;
     } catch {
-      return DEFAULT_NOTIFICATIONS;
+      return [];
     }
   }
 
@@ -335,13 +213,19 @@ class StorageService {
   getQuestions(): VerseQuestion[] {
     const raw = localStorage.getItem(QUESTIONS_KEY);
     if (!raw) {
-      localStorage.setItem(QUESTIONS_KEY, JSON.stringify(DEFAULT_QUESTIONS));
-      return DEFAULT_QUESTIONS;
+      return [];
     }
     try {
-      return JSON.parse(raw);
+      const parsed: VerseQuestion[] = JSON.parse(raw);
+      const filtered = parsed.filter(
+        (q) => !['user-sarah', 'user-david', 'user-michael', 'user-hannah'].includes(q.userId)
+      );
+      if (filtered.length !== parsed.length) {
+        localStorage.setItem(QUESTIONS_KEY, JSON.stringify(filtered));
+      }
+      return filtered;
     } catch {
-      return DEFAULT_QUESTIONS;
+      return [];
     }
   }
 

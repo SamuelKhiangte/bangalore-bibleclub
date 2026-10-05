@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Bell, BookOpen, CheckCheck, Sparkles } from 'lucide-react';
+import { Bell, BookOpen, CheckCheck } from 'lucide-react';
 import { BibleRealDB } from '../../services/storage.ts';
 import type { GroupNotification } from '../../types/index.ts';
 
 interface NotificationDrawerProps {
   onSelectPost?: (postId: string) => void;
-  onTriggerSimulation?: () => void;
 }
 
 function timeAgo(dateStr: string): string {
@@ -20,8 +19,7 @@ function timeAgo(dateStr: string): string {
 }
 
 export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
-  onSelectPost,
-  onTriggerSimulation
+  onSelectPost
 }) => {
   const [notifications, setNotifications] = useState<GroupNotification[]>([]);
 
@@ -46,11 +44,27 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)' }}>
-            Club Notifications
+          <h2
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '24px',
+              fontWeight: 600,
+              letterSpacing: '-0.02em',
+              color: 'var(--text-primary)'
+            }}
+          >
+            circle notifications
           </h2>
-          <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginTop: '2px' }}>
-            Live updates when members in Bangalore finish reading
+          <p
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontStyle: 'italic',
+              fontSize: '14px',
+              color: 'var(--text-secondary)',
+              marginTop: '2px'
+            }}
+          >
+            Live updates when circle members finish their reading
           </p>
         </div>
 
@@ -62,12 +76,12 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
               border: 'none',
               color: 'var(--accent-gold)',
               fontSize: '12px',
-              fontWeight: 700,
+              fontWeight: 600,
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               gap: '4px',
-              fontFamily: 'var(--font-display)'
+              fontFamily: 'var(--font-main)'
             }}
           >
             <CheckCheck size={14} />
@@ -75,64 +89,6 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
           </button>
         )}
       </div>
-
-      {/* Simulator Test Action Card */}
-      {onTriggerSimulation && (
-        <div
-          onClick={onTriggerSimulation}
-          className="glass-panel"
-          style={{
-            padding: '14px 16px',
-            backgroundColor: 'rgba(255, 255, 255, 0.95)',
-            border: '1px solid var(--border-accent)',
-            borderRadius: '18px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            boxShadow: '0 4px 16px rgba(74, 124, 89, 0.1)'
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div
-              style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '12px',
-                backgroundColor: 'rgba(74, 124, 89, 0.15)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--accent-gold)'
-              }}
-            >
-              <Sparkles size={18} />
-            </div>
-            <div>
-              <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>
-                Simulate Friend Reading
-              </div>
-              <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
-                Test immediate notification banner & audio chime
-              </div>
-            </div>
-          </div>
-
-          <span
-            style={{
-              padding: '6px 14px',
-              backgroundColor: 'var(--accent-gold)',
-              color: '#FFFFFF',
-              borderRadius: '9999px',
-              fontSize: '11px',
-              fontWeight: 800,
-              fontFamily: 'var(--font-display)'
-            }}
-          >
-            Trigger
-          </span>
-        </div>
-      )}
 
       {/* Notifications List */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>

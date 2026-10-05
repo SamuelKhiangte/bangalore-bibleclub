@@ -11,7 +11,6 @@ import { PhoneAuthModal } from './components/auth/PhoneAuthModal.tsx';
 import { CreateReadingModal } from './components/post/CreateReadingModal.tsx';
 import { PwaInstallPromptModal } from './components/pwa/PwaInstallPromptModal.tsx';
 import { BibleRealDB } from './services/storage.ts';
-import { simulateFriendReading } from './services/friendSimulator.ts';
 import type { UserProfile, ActiveTab, GroupNotification, ReadingPost } from './types/index.ts';
 
 export default function App() {
@@ -39,11 +38,6 @@ export default function App() {
     });
     return unsub;
   }, [currentUser]);
-
-  const handleSimulateReading = () => {
-    const notif = simulateFriendReading();
-    setActiveNotification(notif);
-  };
 
   const handleLoginSuccess = (user: UserProfile) => {
     BibleRealDB.setUser(user);
@@ -115,7 +109,6 @@ export default function App() {
                 activeTab={activeTab}
                 unreadCount={unreadCount}
                 onTabChange={setActiveTab}
-                onSimulateReading={handleSimulateReading}
                 onOpenInstall={() => setIsInstallModalOpen(true)}
               />
 
@@ -205,7 +198,6 @@ export default function App() {
                       setCircleSubTab('snaps');
                       setActiveTab('feed');
                     }}
-                    onTriggerSimulation={handleSimulateReading}
                   />
                 )}
 
