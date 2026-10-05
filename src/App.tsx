@@ -80,14 +80,7 @@ export default function App() {
 
       {/* Main Container / Phone Mockup Frame */}
       <div className="phone-frame">
-        {/* Dynamic Island / Notch */}
-        <div className="phone-notch-bar">
-          <span>9:41</span>
-          <div className="phone-island">
-            <div className="phone-island-lens"></div>
-          </div>
-          <span>5G 􀛨</span>
-        </div>
+
 
         {/* Real-time Notification Banner */}
         <NotificationBanner
