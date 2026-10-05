@@ -27,9 +27,9 @@ describe('Storage Service (BibleRealDB)', () => {
     expect(BibleRealDB.getUser()).toBeNull();
   });
 
-  it('initializes default friend posts and records new post', () => {
+  it('initializes clean feed and records new post', async () => {
     const posts = BibleRealDB.getPosts();
-    expect(posts.length).toBeGreaterThanOrEqual(2);
+    expect(posts.length).toBe(0);
 
     const newPost: ReadingPost = {
       id: 'test-post',
@@ -51,26 +51,46 @@ describe('Storage Service (BibleRealDB)', () => {
       comments: []
     };
 
-    BibleRealDB.addPost(newPost);
+    await BibleRealDB.addPost(newPost);
     const updated = BibleRealDB.getPosts();
     expect(updated[0].id).toBe('test-post');
   });
 
-  it('handles reactions and comments', () => {
-    const posts = BibleRealDB.getPosts();
-    const firstPostId = posts[0].id;
+  it('handles reactions and comments', async () => {
+    const newPost: ReadingPost = {
+      id: 'test-post-react',
+      userId: 'test-user-1',
+      userName: 'John Doe',
+      userAvatar: 'https://example.com/avatar.jpg',
+      startPhotoUrl: 'data:image/svg+xml;test',
+      endPhotoUrl: 'data:image/svg+xml;test',
+      bookId: 'romans',
+      bookName: 'Romans',
+      startChapter: 8,
+      startVerse: 1,
+      endChapter: 8,
+      endVerse: 39,
+      chaptersCount: 1,
+      durationMinutes: 15,
+      createdAt: new Date().toISOString(),
+      reactions: {},
+      comments: []
+    };
+    await BibleRealDB.addPost(newPost);
 
-    BibleRealDB.toggleReaction(firstPostId, '🔥', 'user-tester');
+    const firstPostId = newPost.id;
+
+    await BibleRealDB.toggleReaction(firstPostId, '🔥', 'user-tester');
     let current = BibleRealDB.getPosts().find((p) => p.id === firstPostId);
     expect(current?.reactions['🔥']).toContain('user-tester');
 
     // Toggle off
-    BibleRealDB.toggleReaction(firstPostId, '🔥', 'user-tester');
+    await BibleRealDB.toggleReaction(firstPostId, '🔥', 'user-tester');
     current = BibleRealDB.getPosts().find((p) => p.id === firstPostId);
     expect(current?.reactions['🔥']).not.toContain('user-tester');
 
     // Add comment
-    BibleRealDB.addComment(firstPostId, {
+    await BibleRealDB.addComment(firstPostId, {
       userId: 'user-tester',
       userName: 'Tester',
       userAvatar: '',

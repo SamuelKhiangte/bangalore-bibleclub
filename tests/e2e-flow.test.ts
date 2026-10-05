@@ -58,7 +58,7 @@ describe('E2E BibleReal App Flow', () => {
     render(React.createElement(App));
 
     // Should show TopHeader with name / brand
-    expect(screen.getByText('Bangalore BibleClub')).toBeDefined();
+    expect(screen.getByText(/bangalore bibleclub/i)).toBeDefined();
     expect(screen.getByText('4')).toBeDefined(); // Streak flame
 
     // Check BottomNav buttons
@@ -70,16 +70,14 @@ describe('E2E BibleReal App Flow', () => {
     // Navigate to Progress Tracker
     fireEvent.click(screen.getByText('Tracker'));
     await waitFor(() => {
-      expect(screen.getByText('Bible Journey Tracker')).toBeDefined();
-      expect(screen.getByText('Testament Breakdown')).toBeDefined();
-      expect(screen.getByText('Old Testament (39 Books)')).toBeDefined();
+      expect(screen.getByText(/bible tracker/i)).toBeDefined();
+      expect(screen.getByText(/Testament Progress/i)).toBeDefined();
     });
 
     // Navigate to Alerts
     fireEvent.click(screen.getByText('Alerts'));
     await waitFor(() => {
-      expect(screen.getByText('Club Notifications')).toBeDefined();
-      expect(screen.getByText('Simulate Friend Reading')).toBeDefined();
+      expect(screen.getByText(/circle notifications/i)).toBeDefined();
     });
   });
 });

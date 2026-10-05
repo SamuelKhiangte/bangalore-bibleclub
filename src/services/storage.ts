@@ -1,4 +1,13 @@
-import type { UserProfile, ReadingPost, GroupNotification, VerseQuestion, QuestionAnswer, PrayerRequest, LeaderboardEntry } from '../types/index.ts';
+import type {
+  UserProfile,
+  ReadingPost,
+  GroupNotification,
+  VerseQuestion,
+  QuestionAnswer,
+  PrayerRequest,
+  LeaderboardEntry
+} from '../types/index.ts';
+import { supabase, uploadReadingPhoto } from './supabase.ts';
 
 const USER_KEY = 'bangalore_bibleclub_user';
 const PROGRESS_KEY = 'bangalore_bibleclub_completed_chapters';
@@ -6,14 +15,22 @@ const POSTS_KEY = 'bangalore_bibleclub_posts';
 const NOTIFICATIONS_KEY = 'bangalore_bibleclub_notifications';
 const QUESTIONS_KEY = 'bangalore_bibleclub_questions';
 const PRAYERS_KEY = 'bangalore_bibleclub_prayers';
+const CIRCLE_PROGRESS_KEY = 'bangalore_bibleclub_circle_progress';
 
 export const DEFAULT_FRIEND_POSTS: ReadingPost[] = [];
 export const DEFAULT_NOTIFICATIONS: GroupNotification[] = [];
 export const DEFAULT_QUESTIONS: VerseQuestion[] = [];
 
-
 class StorageService {
   private listeners: Array<() => void> = [];
+  private isCloudInitialized = false;
+
+  constructor() {
+    // Automatically initialize cloud sync in the browser
+    if (typeof window !== 'undefined') {
+      this.initCloudSync();
+    }
+  }
 
   subscribe(listener: () => void): () => void {
     this.listeners.push(listener);
@@ -24,6 +41,292 @@ class StorageService {
 
   private notify() {
     this.listeners.forEach((l) => l());
+  }
+
+  // --- Real-time Cloud Synchronization ---
+  async initCloudSync(): Promise<void> {
+    if (this.isCloudInitialized) return;
+    this.isCloudInitialized = true;
+
+    try {
+      // 1. Initial parallel fetch from Supabase
+      await Promise.allSettled([
+        this.fetchCloudPosts(),
+        this.fetchCloudPrayers(),
+        this.fetchCloudQuestions(),
+        this.fetchCloudCircleProgress()
+      ]);
+
+      // 2. Setup Supabase Realtime WebSocket Listener
+      supabase
+        .channel('bangalore-bibleclub-circle')
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'reading_posts' },
+          (payload) => {
+            this.handleCloudPostChange(payload);
+          }
+        )
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'prayer_requests' },
+          (payload) => {
+            this.handleCloudPrayerChange(payload);
+          }
+        )
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'user_progress' },
+          () => {
+            this.fetchCloudCircleProgress();
+          }
+        )
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'verse_questions' },
+          () => {
+            this.fetchCloudQuestions();
+          }
+        )
+        .subscribe();
+    } catch (err) {
+      console.warn('Supabase cloud sync initialization note:', err);
+    }
+  }
+
+  private async fetchCloudPosts(): Promise<void> {
+    try {
+      const { data, error } = await supabase
+        .from('reading_posts')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(100);
+
+      if (error || !data) return;
+
+      const formatted: ReadingPost[] = data.map((row) => ({
+        id: row.id,
+        userId: row.user_id,
+        userName: row.user_name,
+        userAvatar: row.user_avatar,
+        startPhotoUrl: row.start_photo_url,
+        endPhotoUrl: row.end_photo_url,
+        bookId: row.book_id,
+        bookName: row.book_name,
+        startChapter: row.start_chapter,
+        startVerse: row.start_verse,
+        endChapter: row.end_chapter,
+        endVerse: row.end_verse,
+        chaptersCount: row.chapters_count || 1,
+        durationMinutes: row.duration_minutes || 15,
+        reflection: row.reflection || undefined,
+        reactions: row.reactions || {},
+        comments: row.comments || [],
+        createdAt: row.created_at
+      }));
+
+      // Merge with any offline local posts
+      const local = this.getAllPosts();
+      const map = new Map<string, ReadingPost>();
+      formatted.forEach((p) => map.set(p.id, p));
+      local.forEach((p) => {
+        if (!map.has(p.id)) map.set(p.id, p);
+      });
+
+      const merged = Array.from(map.values()).sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+
+      localStorage.setItem(POSTS_KEY, JSON.stringify(merged));
+      this.notify();
+    } catch (err) {
+      console.warn('Could not fetch cloud posts:', err);
+    }
+  }
+
+  private async fetchCloudPrayers(): Promise<void> {
+    try {
+      const { data, error } = await supabase
+        .from('prayer_requests')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(100);
+
+      if (error || !data) return;
+
+      const formatted: PrayerRequest[] = data.map((row) => ({
+        id: row.id,
+        userId: row.user_id,
+        userName: row.user_name,
+        userAvatar: row.user_avatar,
+        isAnonymous: row.is_anonymous,
+        title: row.title,
+        description: row.description,
+        prayingUserIds: row.praying_user_ids || [],
+        isAnswered: row.is_answered,
+        createdAt: row.created_at
+      }));
+
+      localStorage.setItem(PRAYERS_KEY, JSON.stringify(formatted));
+      this.notify();
+    } catch (err) {
+      console.warn('Could not fetch cloud prayers:', err);
+    }
+  }
+
+  private async fetchCloudQuestions(): Promise<void> {
+    try {
+      const { data, error } = await supabase
+        .from('verse_questions')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(100);
+
+      if (error || !data) return;
+
+      const formatted: VerseQuestion[] = data.map((row) => ({
+        id: row.id,
+        userId: row.user_id,
+        userName: row.user_name,
+        userAvatar: row.user_avatar,
+        verseReference: row.verse_reference,
+        bookId: row.book_id,
+        questionText: row.question_text,
+        contextNote: row.context_note || undefined,
+        upvotes: row.upvotes || [],
+        answers: row.answers || [],
+        createdAt: row.created_at
+      }));
+
+      localStorage.setItem(QUESTIONS_KEY, JSON.stringify(formatted));
+      this.notify();
+    } catch (err) {
+      console.warn('Could not fetch cloud questions:', err);
+    }
+  }
+
+  private async fetchCloudCircleProgress(): Promise<void> {
+    try {
+      const { data, error } = await supabase.from('user_progress').select('*');
+      if (error || !data) return;
+
+      localStorage.setItem(CIRCLE_PROGRESS_KEY, JSON.stringify(data));
+      this.notify();
+    } catch (err) {
+      console.warn('Could not fetch circle progress:', err);
+    }
+  }
+
+  private handleCloudPostChange(payload: any): void {
+    if (payload.eventType === 'INSERT') {
+      const row = payload.new;
+      const post: ReadingPost = {
+        id: row.id,
+        userId: row.user_id,
+        userName: row.user_name,
+        userAvatar: row.user_avatar,
+        startPhotoUrl: row.start_photo_url,
+        endPhotoUrl: row.end_photo_url,
+        bookId: row.book_id,
+        bookName: row.book_name,
+        startChapter: row.start_chapter,
+        startVerse: row.start_verse,
+        endChapter: row.end_chapter,
+        endVerse: row.end_verse,
+        chaptersCount: row.chapters_count || 1,
+        durationMinutes: row.duration_minutes || 15,
+        reflection: row.reflection || undefined,
+        reactions: row.reactions || {},
+        comments: row.comments || [],
+        createdAt: row.created_at
+      };
+
+      const all = this.getAllPosts();
+      if (!all.some((p) => p.id === post.id)) {
+        const updated = [post, ...all];
+        localStorage.setItem(POSTS_KEY, JSON.stringify(updated));
+
+        // Trigger local notification if posted by a friend
+        const currentUser = this.getUser();
+        if (currentUser && post.userId !== currentUser.id) {
+          this.addNotification({
+            type: 'reading_completed',
+            actorName: post.userName,
+            actorAvatar: post.userAvatar,
+            title: 'Reading Completed',
+            message: `${post.userName} read ${post.bookName} ${post.startChapter}:${post.startVerse}!`,
+            postId: post.id
+          });
+        }
+        this.notify();
+      }
+    } else if (payload.eventType === 'UPDATE') {
+      const row = payload.new;
+      const all = this.getAllPosts().map((p) => {
+        if (p.id === row.id) {
+          return {
+            ...p,
+            reactions: row.reactions || {},
+            comments: row.comments || []
+          };
+        }
+        return p;
+      });
+      localStorage.setItem(POSTS_KEY, JSON.stringify(all));
+      this.notify();
+    } else if (payload.eventType === 'DELETE') {
+      const id = payload.old?.id;
+      if (id) {
+        const filtered = this.getAllPosts().filter((p) => p.id !== id);
+        localStorage.setItem(POSTS_KEY, JSON.stringify(filtered));
+        this.notify();
+      }
+    }
+  }
+
+  private handleCloudPrayerChange(payload: any): void {
+    if (payload.eventType === 'INSERT') {
+      const row = payload.new;
+      const prayer: PrayerRequest = {
+        id: row.id,
+        userId: row.user_id,
+        userName: row.user_name,
+        userAvatar: row.user_avatar,
+        isAnonymous: row.is_anonymous,
+        title: row.title,
+        description: row.description,
+        prayingUserIds: row.praying_user_ids || [],
+        isAnswered: row.is_answered,
+        createdAt: row.created_at
+      };
+
+      const all = this.getPrayerRequests();
+      if (!all.some((p) => p.id === prayer.id)) {
+        localStorage.setItem(PRAYERS_KEY, JSON.stringify([prayer, ...all]));
+        this.notify();
+      }
+    } else if (payload.eventType === 'UPDATE') {
+      const row = payload.new;
+      const all = this.getPrayerRequests().map((p) => {
+        if (p.id === row.id) {
+          return {
+            ...p,
+            prayingUserIds: row.praying_user_ids || [],
+            isAnswered: row.is_answered
+          };
+        }
+        return p;
+      });
+      localStorage.setItem(PRAYERS_KEY, JSON.stringify(all));
+      this.notify();
+    } else if (payload.eventType === 'DELETE') {
+      const id = payload.old?.id;
+      if (id) {
+        const filtered = this.getPrayerRequests().filter((p) => p.id !== id);
+        localStorage.setItem(PRAYERS_KEY, JSON.stringify(filtered));
+        this.notify();
+      }
+    }
   }
 
   // --- User Profile ---
@@ -42,20 +345,34 @@ class StorageService {
       localStorage.removeItem(USER_KEY);
     } else {
       localStorage.setItem(USER_KEY, JSON.stringify(user));
+      // Sync user profile to cloud user_progress
+      this.syncUserProgressToCloud(user);
     }
     this.notify();
+  }
+
+  private async syncUserProgressToCloud(user: UserProfile): Promise<void> {
+    try {
+      const completed = this.getCompletedChapters();
+      await supabase.from('user_progress').upsert({
+        user_id: user.id,
+        user_name: user.name,
+        user_avatar: user.avatarUrl,
+        completed_chapters: completed,
+        streak_days: user.streakDays,
+        last_read_date: user.lastReadDate,
+        updated_at: new Date().toISOString()
+      });
+    } catch (err) {
+      console.warn('Could not sync user progress to cloud:', err);
+    }
   }
 
   // --- Completed Chapters Matrix ---
   getCompletedChapters(): Record<string, number[]> {
     const raw = localStorage.getItem(PROGRESS_KEY);
     if (!raw) {
-      // Default initial progress for demo
-      return {
-        genesis: [1, 2, 3],
-        psalms: [23, 91],
-        john: [1, 2, 3]
-      };
+      return {};
     }
     try {
       return JSON.parse(raw);
@@ -67,6 +384,11 @@ class StorageService {
   setCompletedChapters(chapters: Record<string, number[]>): void {
     localStorage.setItem(PROGRESS_KEY, JSON.stringify(chapters));
     this.notify();
+
+    const user = this.getUser();
+    if (user) {
+      this.syncUserProgressToCloud(user);
+    }
   }
 
   toggleChapter(bookId: string, chapter: number): void {
@@ -75,7 +397,7 @@ class StorageService {
     const list = current[key] || [];
     const exists = list.includes(chapter);
     const updated = exists ? list.filter((c) => c !== chapter) : [...list, chapter];
-    
+
     current[key] = updated;
     this.setCompletedChapters(current);
   }
@@ -94,7 +416,7 @@ class StorageService {
     // Update streak on user profile
     const user = this.getUser();
     if (user) {
-      const todayStr = new Date().toISOString().split('T')[0];
+      const todayStr = new Date().toDateString();
       const isNewDay = user.lastReadDate !== todayStr;
       const updatedUser: UserProfile = {
         ...user,
@@ -125,7 +447,7 @@ class StorageService {
     }
   }
 
-  // --- Active Daily Feed (Photos & Posts expire after 24 hours / 1 day) ---
+  // --- Active Daily Feed (Photos & Posts expire after 24 hours) ---
   getPosts(): ReadingPost[] {
     const all = this.getAllPosts();
     const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
@@ -137,14 +459,51 @@ class StorageService {
     return this.getAllPosts().filter((p) => p.userId === userId);
   }
 
-  addPost(post: ReadingPost): void {
+  async addPost(post: ReadingPost): Promise<void> {
+    // 1. Optimistic local update for instantaneous UI feedback
     const posts = this.getAllPosts();
     const updated = [post, ...posts];
     localStorage.setItem(POSTS_KEY, JSON.stringify(updated));
     this.notify();
+
+    // 2. Asynchronously upload photos to Supabase Storage & insert row into database
+    try {
+      const [uploadedStart, uploadedEnd] = await Promise.all([
+        uploadReadingPhoto(post.startPhotoUrl, `${post.userId}-start`),
+        post.endPhotoUrl ? uploadReadingPhoto(post.endPhotoUrl, `${post.userId}-end`) : Promise.resolve('')
+      ]);
+
+      const cloudPost = {
+        id: post.id,
+        user_id: post.userId,
+        user_name: post.userName,
+        user_avatar: post.userAvatar,
+        start_photo_url: uploadedStart,
+        end_photo_url: uploadedEnd,
+        book_id: post.bookId,
+        book_name: post.bookName,
+        start_chapter: post.startChapter,
+        start_verse: post.startVerse,
+        end_chapter: post.endChapter,
+        end_verse: post.endVerse,
+        chapters_count: post.chaptersCount,
+        duration_minutes: post.durationMinutes,
+        reflection: post.reflection || null,
+        reactions: post.reactions || {},
+        comments: post.comments || [],
+        created_at: post.createdAt
+      };
+
+      const { error } = await supabase.from('reading_posts').insert(cloudPost);
+      if (error) {
+        console.warn('Could not insert post to Supabase:', error.message);
+      }
+    } catch (err) {
+      console.warn('Cloud post upload error:', err);
+    }
   }
 
-  toggleReaction(postId: string, emoji: string, userId: string): void {
+  async toggleReaction(postId: string, emoji: string, userId: string): Promise<void> {
     const posts = this.getAllPosts();
     const post = posts.find((p) => p.id === postId);
     if (!post) return;
@@ -159,22 +518,44 @@ class StorageService {
 
     localStorage.setItem(POSTS_KEY, JSON.stringify(posts));
     this.notify();
+
+    try {
+      await supabase
+        .from('reading_posts')
+        .update({ reactions: post.reactions })
+        .eq('id', postId);
+    } catch (err) {
+      console.warn('Cloud reaction update note:', err);
+    }
   }
 
-  addComment(postId: string, comment: { userId: string; userName: string; userAvatar: string; text: string }): void {
+  async addComment(
+    postId: string,
+    comment: { userId: string; userName: string; userAvatar: string; text: string }
+  ): Promise<void> {
     const posts = this.getAllPosts();
     const post = posts.find((p) => p.id === postId);
     if (!post) return;
 
     if (!post.comments) post.comments = [];
-    post.comments.push({
+    const newComment = {
       ...comment,
       id: `comm-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
       createdAt: new Date().toISOString()
-    });
+    };
+    post.comments.push(newComment);
 
     localStorage.setItem(POSTS_KEY, JSON.stringify(posts));
     this.notify();
+
+    try {
+      await supabase
+        .from('reading_posts')
+        .update({ comments: post.comments })
+        .eq('id', postId);
+    } catch (err) {
+      console.warn('Cloud comment update note:', err);
+    }
   }
 
   // --- Notifications ---
@@ -242,7 +623,9 @@ class StorageService {
     }
   }
 
-  addQuestion(question: Omit<VerseQuestion, 'id' | 'createdAt' | 'upvotes' | 'answers'>): VerseQuestion {
+  async addQuestion(
+    question: Omit<VerseQuestion, 'id' | 'createdAt' | 'upvotes' | 'answers'>
+  ): Promise<VerseQuestion> {
     const all = this.getQuestions();
     const created: VerseQuestion = {
       ...question,
@@ -254,10 +637,32 @@ class StorageService {
     const updated = [created, ...all];
     localStorage.setItem(QUESTIONS_KEY, JSON.stringify(updated));
     this.notify();
+
+    try {
+      await supabase.from('verse_questions').insert({
+        id: created.id,
+        user_id: created.userId,
+        user_name: created.userName,
+        user_avatar: created.userAvatar,
+        verse_reference: created.verseReference,
+        book_id: created.bookId,
+        question_text: created.questionText,
+        context_note: created.contextNote || null,
+        upvotes: [],
+        answers: [],
+        created_at: created.createdAt
+      });
+    } catch (err) {
+      console.warn('Could not insert question to cloud:', err);
+    }
+
     return created;
   }
 
-  addAnswer(questionId: string, answer: { userId: string; userName: string; userAvatar: string; text: string }): void {
+  async addAnswer(
+    questionId: string,
+    answer: { userId: string; userName: string; userAvatar: string; text: string }
+  ): Promise<void> {
     const all = this.getQuestions();
     const q = all.find((item) => item.id === questionId);
     if (!q) return;
@@ -282,9 +687,18 @@ class StorageService {
     });
 
     this.notify();
+
+    try {
+      await supabase
+        .from('verse_questions')
+        .update({ answers: q.answers })
+        .eq('id', questionId);
+    } catch (err) {
+      console.warn('Could not sync answer to cloud:', err);
+    }
   }
 
-  toggleQuestionUpvote(questionId: string, userId: string): void {
+  async toggleQuestionUpvote(questionId: string, userId: string): Promise<void> {
     const all = this.getQuestions();
     const q = all.find((item) => item.id === questionId);
     if (!q) return;
@@ -296,16 +710,25 @@ class StorageService {
     }
     localStorage.setItem(QUESTIONS_KEY, JSON.stringify(all));
     this.notify();
+
+    try {
+      await supabase
+        .from('verse_questions')
+        .update({ upvotes: q.upvotes })
+        .eq('id', questionId);
+    } catch (err) {
+      console.warn('Could not sync question upvote to cloud:', err);
+    }
   }
 
-  toggleAnswerUpvote(questionId: string, answerId: string, userId: string): void {
+  async toggleAnswerUpvote(questionId: string, answerId: string, userId: string): Promise<void> {
     const all = this.getQuestions();
     const q = all.find((item) => item.id === questionId);
     if (!q) return;
-
     const ans = q.answers.find((a) => a.id === answerId);
     if (!ans) return;
 
+    if (!ans.upvotes) ans.upvotes = [];
     if (ans.upvotes.includes(userId)) {
       ans.upvotes = ans.upvotes.filter((u) => u !== userId);
     } else {
@@ -313,7 +736,17 @@ class StorageService {
     }
     localStorage.setItem(QUESTIONS_KEY, JSON.stringify(all));
     this.notify();
+
+    try {
+      await supabase
+        .from('verse_questions')
+        .update({ answers: q.answers })
+        .eq('id', questionId);
+    } catch (err) {
+      console.warn('Could not sync answer upvote to cloud:', err);
+    }
   }
+
   // --- Prayer Points Wall ---
   getPrayerRequests(): PrayerRequest[] {
     const raw = localStorage.getItem(PRAYERS_KEY);
@@ -325,7 +758,9 @@ class StorageService {
     }
   }
 
-  addPrayerRequest(prayer: Omit<PrayerRequest, 'id' | 'createdAt' | 'prayingUserIds'>): PrayerRequest {
+  async addPrayerRequest(
+    prayer: Omit<PrayerRequest, 'id' | 'createdAt' | 'prayingUserIds'>
+  ): Promise<PrayerRequest> {
     const all = this.getPrayerRequests();
     const created: PrayerRequest = {
       ...prayer,
@@ -336,10 +771,28 @@ class StorageService {
     const updated = [created, ...all];
     localStorage.setItem(PRAYERS_KEY, JSON.stringify(updated));
     this.notify();
+
+    try {
+      await supabase.from('prayer_requests').insert({
+        id: created.id,
+        user_id: created.userId,
+        user_name: created.userName,
+        user_avatar: created.userAvatar,
+        is_anonymous: created.isAnonymous,
+        title: created.title,
+        description: created.description,
+        praying_user_ids: [],
+        is_answered: false,
+        created_at: created.createdAt
+      });
+    } catch (err) {
+      console.warn('Could not sync prayer to cloud:', err);
+    }
+
     return created;
   }
 
-  togglePraying(prayerId: string, userId: string): void {
+  async togglePraying(prayerId: string, userId: string): Promise<void> {
     const all = this.getPrayerRequests();
     const item = all.find((p) => p.id === prayerId);
     if (!item) return;
@@ -362,9 +815,18 @@ class StorageService {
     }
     localStorage.setItem(PRAYERS_KEY, JSON.stringify(all));
     this.notify();
+
+    try {
+      await supabase
+        .from('prayer_requests')
+        .update({ praying_user_ids: item.prayingUserIds })
+        .eq('id', prayerId);
+    } catch (err) {
+      console.warn('Could not sync praying status to cloud:', err);
+    }
   }
 
-  togglePrayerAnswered(prayerId: string): void {
+  async togglePrayerAnswered(prayerId: string): Promise<void> {
     const all = this.getPrayerRequests();
     const item = all.find((p) => p.id === prayerId);
     if (!item) return;
@@ -372,16 +834,35 @@ class StorageService {
     item.isAnswered = !item.isAnswered;
     localStorage.setItem(PRAYERS_KEY, JSON.stringify(all));
     this.notify();
+
+    try {
+      await supabase
+        .from('prayer_requests')
+        .update({ is_answered: item.isAnswered })
+        .eq('id', prayerId);
+    } catch (err) {
+      console.warn('Could not sync answered status to cloud:', err);
+    }
   }
 
-  deletePrayerRequest(prayerId: string, userId: string): void {
+  async deletePrayerRequest(prayerId: string, userId: string): Promise<void> {
     const all = this.getPrayerRequests();
     const filtered = all.filter((p) => p.id !== prayerId || p.userId !== userId);
     localStorage.setItem(PRAYERS_KEY, JSON.stringify(filtered));
     this.notify();
+
+    try {
+      await supabase
+        .from('prayer_requests')
+        .delete()
+        .eq('id', prayerId)
+        .eq('user_id', userId);
+    } catch (err) {
+      console.warn('Could not delete prayer from cloud:', err);
+    }
   }
 
-  // --- Leaderboard Calculation ---
+  // --- Leaderboard Calculation (Syncs All Circle Friends Across Phones) ---
   getLeaderboard(): LeaderboardEntry[] {
     const user = this.getUser();
     const completedRecord = this.getCompletedChapters();
@@ -395,7 +876,9 @@ class StorageService {
     const currentUserEntry: LeaderboardEntry = {
       userId: user?.id || 'current-user',
       userName: user?.name ? `${user.name} (You)` : 'You',
-      userAvatar: user?.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80',
+      userAvatar:
+        user?.avatarUrl ||
+        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80',
       chaptersRead: chaptersCount,
       streakDays: streakDays,
       percentageCompleted: userPercentage,
@@ -403,19 +886,46 @@ class StorageService {
       isCurrentUser: true
     };
 
-    // Calculate other participants from all historical posts
-    const allPosts = this.getAllPosts();
-    const otherUsersMap = new Map<string, { name: string; avatar: string; chapters: number; lastPost: string }>();
+    // Read synced circle progress from other friends from cloud
+    const rawCircleProgress = localStorage.getItem(CIRCLE_PROGRESS_KEY);
+    const circleProgressRows: any[] = rawCircleProgress ? JSON.parse(rawCircleProgress) : [];
 
+    const otherUsersMap = new Map<
+      string,
+      { name: string; avatar: string; chapters: number; streak: number }
+    >();
+
+    // 1. Populate from synced user_progress table
+    circleProgressRows.forEach((row) => {
+      if (row.user_id && row.user_id !== user?.id) {
+        let count = 0;
+        if (row.completed_chapters && typeof row.completed_chapters === 'object') {
+          Object.values(row.completed_chapters).forEach((list: any) => {
+            if (Array.isArray(list)) count += list.length;
+          });
+        }
+        otherUsersMap.set(row.user_id, {
+          name: row.user_name || 'Circle Member',
+          avatar:
+            row.user_avatar ||
+            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=80',
+          chapters: count,
+          streak: row.streak_days || 1
+        });
+      }
+    });
+
+    // 2. Also tally from any shared reading posts by friends
+    const allPosts = this.getAllPosts();
     allPosts.forEach((p) => {
-      if (p.userId !== user?.id) {
+      if (p.userId && p.userId !== user?.id) {
         const existing = otherUsersMap.get(p.userId) || {
           name: p.userName,
           avatar: p.userAvatar,
           chapters: 0,
-          lastPost: p.createdAt
+          streak: 1
         };
-        existing.chapters += (p.chaptersCount || 1);
+        existing.chapters = Math.max(existing.chapters, p.chaptersCount || 1);
         otherUsersMap.set(p.userId, existing);
       }
     });
@@ -428,7 +938,7 @@ class StorageService {
         userName: val.name,
         userAvatar: val.avatar,
         chaptersRead: val.chapters,
-        streakDays: 1,
+        streakDays: val.streak,
         percentageCompleted: Number(((val.chapters / 1189) * 100).toFixed(1)),
         rank: 0,
         isCurrentUser: false
@@ -452,4 +962,3 @@ class StorageService {
 }
 
 export const BibleRealDB = new StorageService();
-

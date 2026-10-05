@@ -6,15 +6,11 @@ describe('Verse Q&A and Discussions Storage & Operations', () => {
     localStorage.clear();
   });
 
-  it('loads default questions on initialization', () => {
+  it('initializes questions storage cleanly and creates a question', async () => {
     const questions = BibleRealDB.getQuestions();
-    expect(questions.length).toBeGreaterThan(0);
-    expect(questions[0].verseReference).toBe('John 15:5');
-    expect(questions[0].answers.length).toBeGreaterThan(0);
-  });
+    expect(questions.length).toBe(0);
 
-  it('allows asking a new question on a Bible verse', () => {
-    const newQ = BibleRealDB.addQuestion({
+    const newQ = await BibleRealDB.addQuestion({
       userId: 'user-me',
       userName: 'Samuel Khiangte',
       userAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
@@ -32,12 +28,18 @@ describe('Verse Q&A and Discussions Storage & Operations', () => {
     expect(allQuestions[0].id).toBe(newQ.id); // newest first
   });
 
-  it('allows answering a question and toggling upvotes', () => {
-    const questions = BibleRealDB.getQuestions();
-    const targetQ = questions[0];
+  it('allows answering a question and toggling upvotes', async () => {
+    const targetQ = await BibleRealDB.addQuestion({
+      userId: 'user-me',
+      userName: 'Samuel Khiangte',
+      userAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+      verseReference: 'John 15:5',
+      bookId: 'john',
+      questionText: 'What does abiding in the Vine look like in daily busy life?'
+    });
 
     // Add answer
-    BibleRealDB.addAnswer(targetQ.id, {
+    await BibleRealDB.addAnswer(targetQ.id, {
       userId: 'user-me',
       userName: 'Samuel Khiangte',
       userAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
@@ -49,12 +51,12 @@ describe('Verse Q&A and Discussions Storage & Operations', () => {
     expect(updatedQ?.answers.some((a) => a.text.includes('peace that transcends'))).toBe(true);
 
     // Toggle upvote on question
-    BibleRealDB.toggleQuestionUpvote(targetQ.id, 'user-me');
+    await BibleRealDB.toggleQuestionUpvote(targetQ.id, 'user-me');
     updatedQ = BibleRealDB.getQuestions().find((q) => q.id === targetQ.id);
     expect(updatedQ?.upvotes).toContain('user-me');
 
     // Untoggle upvote
-    BibleRealDB.toggleQuestionUpvote(targetQ.id, 'user-me');
+    await BibleRealDB.toggleQuestionUpvote(targetQ.id, 'user-me');
     updatedQ = BibleRealDB.getQuestions().find((q) => q.id === targetQ.id);
     expect(updatedQ?.upvotes).not.toContain('user-me');
   });
