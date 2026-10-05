@@ -379,6 +379,17 @@ export const FeedView: React.FC<FeedViewProps> = ({ currentUser, onOpenCreatePos
 
       {/* Posts Feed */}
       <div style={{ display: 'flex', flexDirection: 'column' }}>
+        {posts.length > 0 && (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 4px 12px' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', fontWeight: 600, color: 'var(--text-primary)' }}>
+              today's circle snaps
+            </h2>
+            <span style={{ fontSize: '11px', color: 'var(--accent-gold)', fontStyle: 'italic', fontFamily: 'var(--font-display)' }}>
+              24h Daily Refresh
+            </span>
+          </div>
+        )}
+
         {posts.map((post) => (
           <ReadingPostCard
             key={post.id}
@@ -414,7 +425,7 @@ export const FeedView: React.FC<FeedViewProps> = ({ currentUser, onOpenCreatePos
                 lineHeight: 1.2
               }}
             >
-              your journey begins here
+              your circle is quiet today
             </h3>
             <p
               style={{
@@ -423,12 +434,12 @@ export const FeedView: React.FC<FeedViewProps> = ({ currentUser, onOpenCreatePos
                 fontSize: '15px',
                 color: 'var(--text-secondary)',
                 marginTop: '8px',
-                maxWidth: '280px',
+                maxWidth: '290px',
                 margin: '8px auto 0',
                 lineHeight: 1.4
               }}
             >
-              Log your start and end verses to record your first step through the Bible.
+              Feed photos refresh every 24 hours. Be the first to snap today's reading or invite friends to your circle.
             </p>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '22px' }}>
               <button
@@ -437,7 +448,7 @@ export const FeedView: React.FC<FeedViewProps> = ({ currentUser, onOpenCreatePos
                 style={{ padding: '10px 20px', borderRadius: '9999px', fontSize: '13px' }}
               >
                 <BookOpen size={14} />
-                <span>Log First Reading</span>
+                <span>Log Today's Reading</span>
               </button>
               <button
                 className="btn-secondary"

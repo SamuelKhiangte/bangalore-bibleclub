@@ -62,17 +62,43 @@ export interface VerseQuestion {
   answers: QuestionAnswer[];
 }
 
+export interface PrayerRequest {
+  id: string;
+  userId: string;
+  userName: string;
+  userAvatar: string;
+  isAnonymous: boolean;
+  title: string;
+  description: string;
+  createdAt: string;
+  prayingUserIds: string[]; // array of userIds who prayed
+  isAnswered?: boolean;
+}
+
+export interface LeaderboardEntry {
+  userId: string;
+  userName: string;
+  userAvatar: string;
+  chaptersRead: number;
+  streakDays: number;
+  percentageCompleted: number;
+  rank: number;
+  isCurrentUser: boolean;
+}
+
 export interface GroupNotification {
   id: string;
-  type: 'reading_completed' | 'reaction' | 'comment' | 'question_answered';
+  type: 'reading_completed' | 'reaction' | 'comment' | 'question_answered' | 'prayer_support';
   actorName: string;
   actorAvatar: string;
   title: string;
   message: string;
   postId?: string;
   questionId?: string;
+  prayerId?: string;
   timestamp: string;
   read: boolean;
 }
 
 export type ActiveTab = 'feed' | 'read' | 'progress' | 'notifications' | 'profile' | 'qa';
+

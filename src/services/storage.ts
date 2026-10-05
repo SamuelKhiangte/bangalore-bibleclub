@@ -1,10 +1,11 @@
-import type { UserProfile, ReadingPost, GroupNotification, VerseQuestion, QuestionAnswer } from '../types/index.ts';
+import type { UserProfile, ReadingPost, GroupNotification, VerseQuestion, QuestionAnswer, PrayerRequest, LeaderboardEntry } from '../types/index.ts';
 
 const USER_KEY = 'bangalore_bibleclub_user';
 const PROGRESS_KEY = 'bangalore_bibleclub_completed_chapters';
 const POSTS_KEY = 'bangalore_bibleclub_posts';
 const NOTIFICATIONS_KEY = 'bangalore_bibleclub_notifications';
 const QUESTIONS_KEY = 'bangalore_bibleclub_questions';
+const PRAYERS_KEY = 'bangalore_bibleclub_prayers';
 
 export const DEFAULT_FRIEND_POSTS: ReadingPost[] = [];
 export const DEFAULT_NOTIFICATIONS: GroupNotification[] = [];
@@ -104,8 +105,8 @@ class StorageService {
     }
   }
 
-  // --- Posts ---
-  getPosts(): ReadingPost[] {
+  // --- Posts Storage (Permanent Persistence) ---
+  getAllPosts(): ReadingPost[] {
     const raw = localStorage.getItem(POSTS_KEY);
     if (!raw) {
       return [];
@@ -124,15 +125,27 @@ class StorageService {
     }
   }
 
+  // --- Active Daily Feed (Photos & Posts expire after 24 hours / 1 day) ---
+  getPosts(): ReadingPost[] {
+    const all = this.getAllPosts();
+    const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
+    return all.filter((p) => new Date(p.createdAt).getTime() >= oneDayAgo);
+  }
+
+  // --- User Personal Archive (All historical reading snaps remain saved) ---
+  getUserArchive(userId: string): ReadingPost[] {
+    return this.getAllPosts().filter((p) => p.userId === userId);
+  }
+
   addPost(post: ReadingPost): void {
-    const posts = this.getPosts();
+    const posts = this.getAllPosts();
     const updated = [post, ...posts];
     localStorage.setItem(POSTS_KEY, JSON.stringify(updated));
     this.notify();
   }
 
   toggleReaction(postId: string, emoji: string, userId: string): void {
-    const posts = this.getPosts();
+    const posts = this.getAllPosts();
     const post = posts.find((p) => p.id === postId);
     if (!post) return;
 
@@ -149,7 +162,7 @@ class StorageService {
   }
 
   addComment(postId: string, comment: { userId: string; userName: string; userAvatar: string; text: string }): void {
-    const posts = this.getPosts();
+    const posts = this.getAllPosts();
     const post = posts.find((p) => p.id === postId);
     if (!post) return;
 
@@ -300,6 +313,141 @@ class StorageService {
     }
     localStorage.setItem(QUESTIONS_KEY, JSON.stringify(all));
     this.notify();
+  }
+  // --- Prayer Points Wall ---
+  getPrayerRequests(): PrayerRequest[] {
+    const raw = localStorage.getItem(PRAYERS_KEY);
+    if (!raw) return [];
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return [];
+    }
+  }
+
+  addPrayerRequest(prayer: Omit<PrayerRequest, 'id' | 'createdAt' | 'prayingUserIds'>): PrayerRequest {
+    const all = this.getPrayerRequests();
+    const created: PrayerRequest = {
+      ...prayer,
+      id: `prayer-${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      prayingUserIds: []
+    };
+    const updated = [created, ...all];
+    localStorage.setItem(PRAYERS_KEY, JSON.stringify(updated));
+    this.notify();
+    return created;
+  }
+
+  togglePraying(prayerId: string, userId: string): void {
+    const all = this.getPrayerRequests();
+    const item = all.find((p) => p.id === prayerId);
+    if (!item) return;
+
+    if (item.prayingUserIds.includes(userId)) {
+      item.prayingUserIds = item.prayingUserIds.filter((id) => id !== userId);
+    } else {
+      item.prayingUserIds.push(userId);
+      if (!item.isAnonymous && item.userId !== userId) {
+        const user = this.getUser();
+        this.addNotification({
+          type: 'prayer_support',
+          actorName: user?.name || 'A circle member',
+          actorAvatar: user?.avatarUrl || '',
+          title: 'Prayer Support',
+          message: `${user?.name || 'A circle member'} is praying for: "${item.title}"`,
+          prayerId
+        });
+      }
+    }
+    localStorage.setItem(PRAYERS_KEY, JSON.stringify(all));
+    this.notify();
+  }
+
+  togglePrayerAnswered(prayerId: string): void {
+    const all = this.getPrayerRequests();
+    const item = all.find((p) => p.id === prayerId);
+    if (!item) return;
+
+    item.isAnswered = !item.isAnswered;
+    localStorage.setItem(PRAYERS_KEY, JSON.stringify(all));
+    this.notify();
+  }
+
+  deletePrayerRequest(prayerId: string, userId: string): void {
+    const all = this.getPrayerRequests();
+    const filtered = all.filter((p) => p.id !== prayerId || p.userId !== userId);
+    localStorage.setItem(PRAYERS_KEY, JSON.stringify(filtered));
+    this.notify();
+  }
+
+  // --- Leaderboard Calculation ---
+  getLeaderboard(): LeaderboardEntry[] {
+    const user = this.getUser();
+    const completedRecord = this.getCompletedChapters();
+    let chaptersCount = 0;
+    Object.values(completedRecord).forEach((list) => {
+      chaptersCount += list.length;
+    });
+    const streakDays = user?.streakDays || (chaptersCount > 0 ? 1 : 0);
+    const userPercentage = Number(((chaptersCount / 1189) * 100).toFixed(1));
+
+    const currentUserEntry: LeaderboardEntry = {
+      userId: user?.id || 'current-user',
+      userName: user?.name ? `${user.name} (You)` : 'You',
+      userAvatar: user?.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80',
+      chaptersRead: chaptersCount,
+      streakDays: streakDays,
+      percentageCompleted: userPercentage,
+      rank: 1,
+      isCurrentUser: true
+    };
+
+    // Calculate other participants from all historical posts
+    const allPosts = this.getAllPosts();
+    const otherUsersMap = new Map<string, { name: string; avatar: string; chapters: number; lastPost: string }>();
+
+    allPosts.forEach((p) => {
+      if (p.userId !== user?.id) {
+        const existing = otherUsersMap.get(p.userId) || {
+          name: p.userName,
+          avatar: p.userAvatar,
+          chapters: 0,
+          lastPost: p.createdAt
+        };
+        existing.chapters += (p.chaptersCount || 1);
+        otherUsersMap.set(p.userId, existing);
+      }
+    });
+
+    const list: LeaderboardEntry[] = [currentUserEntry];
+
+    otherUsersMap.forEach((val, id) => {
+      list.push({
+        userId: id,
+        userName: val.name,
+        userAvatar: val.avatar,
+        chaptersRead: val.chapters,
+        streakDays: 1,
+        percentageCompleted: Number(((val.chapters / 1189) * 100).toFixed(1)),
+        rank: 0,
+        isCurrentUser: false
+      });
+    });
+
+    // Sort descending by chaptersRead, then streakDays
+    list.sort((a, b) => {
+      if (b.chaptersRead !== a.chaptersRead) {
+        return b.chaptersRead - a.chaptersRead;
+      }
+      return b.streakDays - a.streakDays;
+    });
+
+    // Assign rank
+    return list.map((entry, index) => ({
+      ...entry,
+      rank: index + 1
+    }));
   }
 }
 

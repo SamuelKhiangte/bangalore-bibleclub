@@ -3,6 +3,7 @@ import { TopHeader } from './components/layout/TopHeader.tsx';
 import { BottomNav } from './components/layout/BottomNav.tsx';
 import { FeedView } from './components/feed/FeedView.tsx';
 import { VerseQAView } from './components/qa/VerseQAView.tsx';
+import { PrayerWallView } from './components/prayers/PrayerWallView.tsx';
 import { ProgressDashboard } from './components/progress/ProgressDashboard.tsx';
 import { NotificationDrawer } from './components/notifications/NotificationDrawer.tsx';
 import { NotificationBanner } from './components/notifications/NotificationBanner.tsx';
@@ -16,7 +17,7 @@ import type { UserProfile, ActiveTab, GroupNotification, ReadingPost } from './t
 export default function App() {
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(() => BibleRealDB.getUser());
   const [activeTab, setActiveTab] = useState<ActiveTab>('feed');
-  const [circleSubTab, setCircleSubTab] = useState<'snaps' | 'qa'>('snaps');
+  const [circleSubTab, setCircleSubTab] = useState<'snaps' | 'prayers' | 'qa'>('snaps');
   const [isCaptureModalOpen, setIsCaptureModalOpen] = useState(false);
   const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
   const [activeNotification, setActiveNotification] = useState<GroupNotification | null>(null);
@@ -136,36 +137,53 @@ export default function App() {
                     <button
                       onClick={() => setCircleSubTab('snaps')}
                       style={{
-                        padding: '6px 16px',
+                        padding: '6px 14px',
                         borderRadius: '9999px',
                         border: 'none',
                         background: circleSubTab === 'snaps' ? 'var(--accent-gold)' : 'transparent',
                         color: circleSubTab === 'snaps' ? '#FFFFFF' : 'var(--text-secondary)',
-                        fontSize: '12px',
-                        fontWeight: 800,
+                        fontSize: '11px',
+                        fontWeight: 700,
                         fontFamily: 'var(--font-display)',
                         cursor: 'pointer',
                         transition: 'all 0.15s ease'
                       }}
                     >
-                      📸 Reading Snaps
+                      📸 Snaps
+                    </button>
+                    <button
+                      onClick={() => setCircleSubTab('prayers')}
+                      style={{
+                        padding: '6px 14px',
+                        borderRadius: '9999px',
+                        border: 'none',
+                        background: circleSubTab === 'prayers' ? 'var(--accent-gold)' : 'transparent',
+                        color: circleSubTab === 'prayers' ? '#FFFFFF' : 'var(--text-secondary)',
+                        fontSize: '11px',
+                        fontWeight: 700,
+                        fontFamily: 'var(--font-display)',
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease'
+                      }}
+                    >
+                      🙏 Prayers
                     </button>
                     <button
                       onClick={() => setCircleSubTab('qa')}
                       style={{
-                        padding: '6px 16px',
+                        padding: '6px 14px',
                         borderRadius: '9999px',
                         border: 'none',
                         background: circleSubTab === 'qa' ? 'var(--accent-gold)' : 'transparent',
                         color: circleSubTab === 'qa' ? '#FFFFFF' : 'var(--text-secondary)',
-                        fontSize: '12px',
-                        fontWeight: 800,
+                        fontSize: '11px',
+                        fontWeight: 700,
                         fontFamily: 'var(--font-display)',
                         cursor: 'pointer',
                         transition: 'all 0.15s ease'
                       }}
                     >
-                      💬 Verse Q&A
+                      💬 Q&A
                     </button>
                   </div>
                 </div>
@@ -178,6 +196,10 @@ export default function App() {
                     currentUser={currentUser}
                     onOpenCreatePost={() => setIsCaptureModalOpen(true)}
                   />
+                )}
+
+                {activeTab === 'feed' && circleSubTab === 'prayers' && (
+                  <PrayerWallView currentUser={currentUser} />
                 )}
 
                 {activeTab === 'feed' && circleSubTab === 'qa' && (
